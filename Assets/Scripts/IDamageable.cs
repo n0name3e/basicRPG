@@ -1,0 +1,9 @@
+﻿public interface IDamageable
+{
+    /*float maxHealth { get; set; }
+    float health { get; set; }
+    float speed { get; set; }
+    float attackSpeed { get; set; }*/
+    void Hit(float damage, IDamageable sender);
+    UnityEngine.Transform Pos { get; set; }
+}

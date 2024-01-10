@@ -1,0 +1,11 @@
+{
+  "abilities": [
+    {
+      "name": "fireball",
+      "targeted": false,
+      "damageMultiplier": 1,
+      "manaCost": 40,
+      "cooldown": 6
+    }
+  ]
+}
