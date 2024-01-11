@@ -1,12 +1,12 @@
 using UnityEngine;
 
 [System.Serializable]
-public class WeaponEvent: UnityEvent<GameObject> {}
+public class WeaponEvent: UnityEngine.Events.UnityEvent<GameObject> {}
 
 [CreateAssetMenu(fileName = "Weapon", menuName = "Items", order = 2)]
 public class Weapon: ScriptableObject
 {
-	public string name;
+	public string Name;
 	public Sprite icon;
     
 	public float damage;

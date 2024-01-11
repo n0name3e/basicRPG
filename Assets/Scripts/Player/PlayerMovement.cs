@@ -79,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direction = (mousePosition - transform.position).normalized;
 
         GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-        bullet.AddComponent<Bullet>().Launch(direction, 20f, GetComponent<IDamageable>());
+        bullet.AddComponent<Bullet>().Launch(direction, 20f, GetComponent<IDamageable>(), player.PlayerStats.physicDamage);
         attackTimer = player.PlayerStats.attackCooldown / player.PlayerStats.attackSpeed;
         UI.Instance.UpdateAttackBar();
     }

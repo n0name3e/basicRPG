@@ -103,7 +103,7 @@ public class UI : MonoBehaviour
 	{
 		if (weapon.icon != null)
 		{
-			weaponImage.GetComponent<Image>().image = weapon.icon;			
+			weaponImage.GetComponent<Image>().sprite = weapon.icon;			
 		}
 		UpdatePhysicDamageText();
 	}

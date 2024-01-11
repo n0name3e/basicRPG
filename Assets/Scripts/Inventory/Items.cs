@@ -26,11 +26,12 @@ public class Items: MonoBehaviour
     {
         player.GetComponent<Player>().Heal(10);
     }
-	public void FindItem(string name)
+	public Item FindItem(string name)
 	{
 		for(int i = 0; i < items.Count; i++)
 		{
 			if (items[i].Name == name) return items[i];
 		}
+        return null;
 	}
 }

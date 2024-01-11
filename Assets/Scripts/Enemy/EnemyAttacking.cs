@@ -75,6 +75,6 @@ public class EnemyAttacking : MonoBehaviour
         Vector2 direction = (player.transform.position - transform.position).normalized;
 
         GameObject bullet = Instantiate(Resources.Load<GameObject>("Projective"), transform.position, transform.rotation);
-        bullet.AddComponent<Bullet>().Launch(direction, 15f, GetComponent<Enemy>());
+        bullet.AddComponent<Bullet>().Launch(direction, 15f, GetComponent<Enemy>(), GetComponent<Enemy>().damage);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public enum EnemyState
 {
@@ -22,6 +23,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField] public float attackCooldown { get; set; } = 1f;
     [field: SerializeField] public float attackSpeed { get; set; } = 1f; // multiplier to attack delay and cooldown
     [field: SerializeField] public float attackRange { get; set; } = 2.5f;
+    [field: SerializeField] public float damage { get; set; } = 20f;
     [field: SerializeField] public int experience = 150;
 
     [SerializeField] private float detectionRadius = 5f;
@@ -30,9 +32,10 @@ public class Enemy : MonoBehaviour, IDamageable
     private Player player;
     public Transform Pos { get; set; }
 
-	public Dictionary<string, int> dropTable = new Dictionary<string, int>();
-	public List<Buff> buffs = new List<Buff>();
-	
+
+    //[SerializeField] public Dictionary<string, float> dropTable = new Dictionary<string, float>();
+    public SerializedDictionary dropTable { get; set; } = new SerializedDictionary(); //<string, float> dropTable;
+    public List<Buff> buffs { get; set; } = new List<Buff>();
 
     public void Hit(float damage, IDamageable sender)
     {
@@ -42,18 +45,22 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     private void Die()
     {
+        DropItems();
         Destroy(gameObject);
         player.AddXP(experience);
     }
 	private void DropItems()
 	{
-		for (int i = 0; i < dropTable.Count; i++)
+		//for (int i = 0; i < dropTable.Count; i++)
+        foreach (KeyValuePair<string, float> item in dropTable.dictionary)
 		{
 			float r = Random.Range(0, 1);
-			if (r < dropTable[i].Value)
+			if (r < dropTable.dictionary[item.Key])
 			{
-				GameObject box = Instantiate(Resources.Load("ItemBox"), transform.position, Quaternion.identity);
-			    box.AddComponent<ItemObject>().item = Items.FindItem(dropTable[i].Key);				
+				GameObject box = Instantiate(Resources.Load<GameObject>("ItemBox"), transform.position, Quaternion.identity);
+                string name = item.Key;
+                print(box);
+                box.AddComponent<ItemObject>().item = Items.Instance.FindItem(name);            
 			}
 		}
 	}

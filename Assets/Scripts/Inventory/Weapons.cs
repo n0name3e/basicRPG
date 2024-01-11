@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Weapons: MonoBehavior
+public class Weapons: MonoBehaviour
 {
 	public Weapon basicStaff;
 	public Weapon fireStaff;

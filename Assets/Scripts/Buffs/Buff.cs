@@ -4,7 +4,7 @@ public class Buff
 	public float duration;
 	public float time;
 
-	public delegate void BuffEvent(Buff buff);
+	public delegate void BuffEvent(Buff buff, IDamageable target);
 	public BuffEvent OnAddBuff;
 	public BuffEvent OnUpdateBuff;
 	public BuffEvent OnRemoveBuff;
