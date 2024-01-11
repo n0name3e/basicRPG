@@ -7,6 +7,7 @@ public class Inventory : MonoBehaviour
     public static Inventory Instance { get; private set; }
     private Player player;
     public List<Item> items { get; private set; } = new List<Item>();
+	public List<Weapon> weapons { get; private set; } = new List<Weapon>();
 
     private void Awake()
     {
@@ -30,6 +31,10 @@ public class Inventory : MonoBehaviour
         RemoveItemStats(item);
         UI.Instance.UpdateItems();
     }
+	public void ChangeWeapon(Weapon weapon)
+	{
+		player.ChangeWeapon(weapon);
+	}
     public Item FindItem(string name)
     {
         for (int i = 0; i < items.Count; i++)

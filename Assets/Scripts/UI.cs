@@ -11,6 +11,7 @@ public class UI : MonoBehaviour
     [SerializeField] private GameObject attackBar;
     [SerializeField] private Text physicDamageText;
     [SerializeField] private Text magicDamageText;
+	[SerializeField] private GameObject weaponImage;
 
     [Space(5)]
     [Header("Stats")]
@@ -98,6 +99,14 @@ public class UI : MonoBehaviour
         hpBar.GetComponent<RectTransform>().Translate(new Vector2(-statsWindow.GetComponent<RectTransform>().sizeDelta.x, 0));
         GameManager.Instance.UnPause();
     }
+	public void ChangeWeapon(Weapon weapon)
+	{
+		if (weapon.icon != null)
+		{
+			weaponImage.GetComponent<Image>().image = weapon.icon;			
+		}
+		UpdatePhysicDamageText();
+	}
     public void UpdateItems()
     {
         foreach (Transform gmObject in inventoryWindow.transform)

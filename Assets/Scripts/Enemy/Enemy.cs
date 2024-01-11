@@ -30,6 +30,10 @@ public class Enemy : MonoBehaviour, IDamageable
     private Player player;
     public Transform Pos { get; set; }
 
+	public Dictionary<string, int> dropTable = new Dictionary<string, int>();
+	public List<Buff> buffs = new List<Buff>();
+	
+
     public void Hit(float damage, IDamageable sender)
     {
         health -= damage;
@@ -41,6 +45,18 @@ public class Enemy : MonoBehaviour, IDamageable
         Destroy(gameObject);
         player.AddXP(experience);
     }
+	private void DropItems()
+	{
+		for (int i = 0; i < dropTable.Count; i++)
+		{
+			float r = Random.Range(0, 1);
+			if (r < dropTable[i].Value)
+			{
+				GameObject box = Instantiate(Resources.Load("ItemBox"), transform.position, Quaternion.identity);
+			    box.AddComponent<ItemObject>().item = Items.FindItem(dropTable[i].Key);				
+			}
+		}
+	}
     private void Start()
     {
         state = EnemyState.Patrolling;

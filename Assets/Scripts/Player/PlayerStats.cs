@@ -8,4 +8,5 @@ public class PlayerStats: MonoBehaviour
     [field: SerializeField] public float attackCooldown { get; set; } = 1f;
     [field: SerializeField] public float physicDamage { get; set; } = 20f;
     [field: SerializeField] public float magicDamage { get; set; } = 30f;
+	[field: SerializeField] public float defense { get; set; } = 0f;
 }

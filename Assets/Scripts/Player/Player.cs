@@ -13,6 +13,8 @@ public class Player : MonoBehaviour, IDamageable
     public int Experience { get; private set; } = 0;
     public PlayerStats PlayerStats { get; private set; }
 
+	public List<Buff> buffs = new List<Buff>();
+
     private PlayerMovement _movement;
     public Transform Pos { get; set; }
 
@@ -40,6 +42,10 @@ public class Player : MonoBehaviour, IDamageable
         health = Mathf.Min(PlayerStats.maxHealth, health + amount);
         UI.Instance.UpdateHealthBar();
     }
+	public void ChangeWeapon(Weapon weapon)
+	{
+		PlayerStats.attackCooldown = weapon.attackCooldown;
+	}
     public void AddXP(int xp)
     {
         Experience += xp;

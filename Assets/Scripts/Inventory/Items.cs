@@ -8,6 +8,9 @@ public class Items: MonoBehaviour
     public Item stone;
     public Item healingPotion;
 
+	private List<Item> items = new List<Item>();
+	
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -16,9 +19,18 @@ public class Items: MonoBehaviour
     private void Start()
     {
         healingPotion.OnUse.AddListener(UseHealingPotion);
+		items.Add(stone);
+		items.Add(healingPotion);
     }
     private void UseHealingPotion(GameObject player)
     {
         player.GetComponent<Player>().Heal(10);
     }
+	public void FindItem(string name)
+	{
+		for(int i = 0; i < items.Count; i++)
+		{
+			if (items[i].Name == name) return items[i];
+		}
+	}
 }
