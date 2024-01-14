@@ -28,6 +28,10 @@ public class Player : MonoBehaviour, IDamageable
         health = PlayerStats.maxHealth;
         Pos = transform;
     }
+	private void Update()
+	{
+		BuffManager.Instance.UpdateBuffs(this);
+	}
 
     public void Hit(float damage, IDamageable attacker)
     {
