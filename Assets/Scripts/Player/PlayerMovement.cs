@@ -78,8 +78,10 @@ public class PlayerMovement : MonoBehaviour
         mousePosition.z = 0;
         Vector3 direction = (mousePosition - transform.position).normalized;
 
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-        bullet.AddComponent<Bullet>().Launch(direction, 20f, GetComponent<IDamageable>(), player.PlayerStats.physicDamage);
+        GameObject bulletObject = Instantiate(bulletPrefab, transform.position, transform.rotation);
+        Bullet bullet = bulletObject.AddComponent<Bullet>();
+        bullet.Launch(direction, 20f, GetComponent<IDamageable>(), player.PlayerStats.physicDamage);
+        bullet.OnHit = player.weapon.OnHit;
         attackTimer = player.PlayerStats.attackCooldown / player.PlayerStats.attackSpeed;
         UI.Instance.UpdateAttackBar();
     }

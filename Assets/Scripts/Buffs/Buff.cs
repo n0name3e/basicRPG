@@ -5,11 +5,12 @@ public class Buff
 	public float time;
 	public int stacks;
 	public bool hidden;
+	public bool unlimited;
 	private IDamageable target;
 
-	public delegate void BuffEvent(Buff buff, IDamageable target) { private get; set;}
+	public delegate void BuffEvent(Buff buff, IDamageable target); 
 	public BuffEvent OnAddBuff { private get; set; }
-	public BuffEvent OnUpdateBuff { private get; set;}
+	public BuffEvent OnUpdateBuff { private get; set; }
 	public BuffEvent OnRemoveBuff { private get; set; }
 	public BuffEvent OnFrameUpdate { private get; set; }
 
@@ -22,19 +23,19 @@ public class Buff
 		this.hidden = hidden;
 	}
 	
-	public void Add()
+	public void TriggerAddEvent()
 	{
 		OnAddBuff?.Invoke(this, target);
 	}
-    public void Remove()
+    public void TriggerRemoveEvent()
 	{
 		OnRemoveBuff?.Invoke(this, target);
 	}
-	public void Update()
+	public void TriggerUpdateEvent()
 	{
 		OnUpdateBuff?.Invoke(this, target);
 	}
-	public void FrameUpdate()
+	public void TriggerFrameUpdateEvent()
 	{
 		OnFrameUpdate?.Invoke(this, target);
 	}

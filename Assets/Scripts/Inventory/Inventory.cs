@@ -15,10 +15,6 @@ public class Inventory : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
-    private void Update()
-    {
-        print(items.Count);
-    }
     public void AddItem(Item item)
     {
         items.Add(item);

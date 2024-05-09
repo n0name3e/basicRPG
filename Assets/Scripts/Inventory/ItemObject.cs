@@ -8,7 +8,9 @@ public class ItemObject: MonoBehaviour
 	{
 		if (collision.GetComponent<Player>() != null)
 		{
+			print("collide");
 			Inventory.Instance.AddItem(item);
+			Destroy(gameObject);
 		}
 	}
 }

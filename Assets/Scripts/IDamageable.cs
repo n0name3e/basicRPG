@@ -5,6 +5,6 @@
     float speed { get; set; }
     float attackSpeed { get; set; }*/
     void Hit(float damage, IDamageable sender);
-    UnityEngine.Transform Pos { get; set; }
+    UnityEngine.Transform Transform { get; set; }
 	System.Collections.Generic.List<Buff> buffs { get; set; }
 }

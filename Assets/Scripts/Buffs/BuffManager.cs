@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BuffManager: MonoBehaviour
@@ -15,29 +16,35 @@ public class BuffManager: MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
-	public void AddBuff(Buff buff, IDamageable target)
+	public void AddBuff(Buff buff, IDamageable target, bool triggerEvent = true)
 	{
-		Buff existingBuff = FindBuff(buff.name);
+		//print($"{target.Transform.name} had their debuff { buff.name } Added! ");
+		Buff existingBuff = FindBuff(buff.name, target);
 		if (existingBuff != null)
 		{
-			existingBuff.Update();
+			print("found buff");
+			existingBuff.TriggerUpdateEvent();
 			existingBuff.time = buff.duration;
 			return;
 		}
+		buff.time = buff.duration;
 		target.buffs.Add(buff);
-		buff.Add();
+		if (triggerEvent)
+			buff.TriggerAddEvent();
 	}
-	public void RemoveBuff(Buff buff, IDamageable target)
+	public void RemoveBuff(Buff buff, IDamageable target, bool triggerEvent = true)
 	{
-		buff.Remove();
-		target.buffs.Remove(FindBuff(buff.Name, target));
+		print($"{target.Transform.name} had their debuff { buff.name } Removed! ");
+		target.buffs.Remove(FindBuff(buff.name, target));
+		if (triggerEvent) 
+			buff.TriggerRemoveEvent();
 	}
 	public Buff FindBuff(string name, IDamageable target)
 	{
 		List<Buff> buffs = target.buffs;
 		for (int i = 0; i < buffs.Count; i++)
 		{
-			if buffs[i].Name == name) return buffs[i];
+			if (buffs[i].name == name) return buffs[i];
 		}
 		return null;
 	}
@@ -46,7 +53,8 @@ public class BuffManager: MonoBehaviour
 		List<Buff> buffs = target.buffs;
 		for (int i = 0; i < buffs.Count; i++)
 		{
-			buffs[i].FrameUpdate();
+			buffs[i].TriggerFrameUpdateEvent();
+			if (buffs[i].unlimited) continue;
 			buffs[i].time -= Time.deltaTime;
 			if (buffs[i].time <= 0)
 			{

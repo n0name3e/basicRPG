@@ -59,7 +59,7 @@ public class EnemyEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add"))
-        {
+        {   
             AddItem(enemy.dropTable, newKey, newValue);
         }
         if (GUILayout.Button("Remove"))

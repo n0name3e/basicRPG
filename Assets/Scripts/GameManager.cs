@@ -12,11 +12,18 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator Start()
     {
-        yield return null;
         Player = FindObjectOfType<Player>();
+        yield return null;
         Inventory.Instance.AddItem(Items.Instance.stone);
         Inventory.Instance.AddItem(Items.Instance.healingPotion);
         Inventory.Instance.AddItem(Items.Instance.healingPotion);
+        SpawnEnemy();
+    }
+    public void SpawnEnemy()
+    {
+        GameObject loadedEnemy = Resources.Load<GameObject>("Enemy");
+        Enemy enemy = Instantiate(loadedEnemy, new Vector2(3, 2), Quaternion.identity).GetComponent<Enemy>();
+        enemy.dropTable = loadedEnemy.GetComponent<Enemy>().dropTable;
     }
     public int GetNextLevelExperience(int nextLevel)
     {

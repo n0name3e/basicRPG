@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public EnemyState state { get; set; }
     private Player player;
-    public Transform Pos { get; set; }
+    public Transform Transform { get; set; }
 
 
     //[SerializeField] public Dictionary<string, float> dropTable = new Dictionary<string, float>();
@@ -51,11 +51,12 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 	private void DropItems()
 	{
+        print("drop00");
 		//for (int i = 0; i < dropTable.Count; i++)
         foreach (KeyValuePair<string, float> item in dropTable.dictionary)
 		{
-			float r = Random.Range(0, 1);
-			if (r < dropTable.dictionary[item.Key])
+            print("dropping");
+			if (Random.Range(0, 1) < dropTable.dictionary[item.Key])
 			{
 				GameObject box = Instantiate(Resources.Load<GameObject>("ItemBox"), transform.position, Quaternion.identity);
                 string name = item.Key;
@@ -69,7 +70,7 @@ public class Enemy : MonoBehaviour, IDamageable
         state = EnemyState.Patrolling;
         player = FindObjectOfType<Player>();
         health = maxHealth;
-        Pos = transform;
+        Transform = transform;
     }
     private void Update()
     {
@@ -82,5 +83,6 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             state = EnemyState.Chasing;
         }
+        BuffManager.Instance.UpdateBuffs(this);
     }
 }

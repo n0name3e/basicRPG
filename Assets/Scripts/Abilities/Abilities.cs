@@ -22,7 +22,6 @@ public class Abilities : MonoBehaviour
     private void InitializeAbilities()
     {
         Ability fireball = new Ability("fireball") { OnUntargetedAbilityChoose = UseFireball };
-        print(fireball.abilityData.damageMultiplier);
         player.Abilities.Add(fireball);
         AbilityManager.Instance.CreateAbilityButtons();
     }

@@ -16,7 +16,11 @@ public class Player : MonoBehaviour, IDamageable
 	public List<Buff> buffs { get; set; } = new List<Buff>();
 
     private PlayerMovement _movement;
-    public Transform Pos { get; set; }
+    public Transform Transform { get; set; }
+
+    public Weapon weapon { get; private set; }
+
+
 
     private void Awake()
     {
@@ -25,8 +29,24 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void Start()
     {
+        Transform = transform;
+        /*Buff healthRegenTimer = new Buff("timer", 1f, this);
+        healthRegenTimer.OnRemoveBuff = delegate
+        {
+            Heal(1);
+            BuffManager.Instance.AddBuff(healthRegenTimer, this);
+        };
+        Buff healthRegen = new Buff("hpRegen", 1f, this)
+        {
+            unlimited = true,
+            OnAddBuff = delegate 
+            {
+                BuffManager.Instance.AddBuff(healthRegenTimer, this);
+            }
+        };
+        BuffManager.Instance.AddBuff(healthRegen, this);
+        */
         health = PlayerStats.maxHealth;
-        Pos = transform;
     }
 	private void Update()
 	{
@@ -35,11 +55,10 @@ public class Player : MonoBehaviour, IDamageable
 
     public void Hit(float damage, IDamageable attacker)
     {
-        print("hit");
         health -= damage;
         UI.Instance.UpdateHealthBar();
         if (health <= 0) Destroy(gameObject);
-        _movement.Knockback(transform.position - attacker.Pos.transform.position);
+        _movement.Knockback(transform.position - attacker.Transform.transform.position);
     }
     public void Heal(float amount)
     {
@@ -49,12 +68,13 @@ public class Player : MonoBehaviour, IDamageable
 	public void ChangeWeapon(Weapon weapon)
 	{
 		PlayerStats.attackCooldown = weapon.attackCooldown;
+        PlayerStats.physicDamage = weapon.damage;
+        this.weapon = weapon;
 	}
     public void AddXP(int xp)
     {
         Experience += xp;
-        CheckLevel();
-        
+        CheckLevel();     
     }
     private void CheckLevel()
     {
@@ -65,7 +85,6 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void UpLevel()
     {
-        print("levelup");
         Level++;
         Experience -= nextLevelExperience;
         nextLevelExperience = GameManager.Instance.GetNextLevelExperience(Level);
