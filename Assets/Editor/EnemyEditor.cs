@@ -5,7 +5,7 @@ using System.Linq;
 [CustomEditor(typeof(Enemy))]
 public class EnemyEditor : Editor
 {
-    private string newKey;   // Replace TKey with the actual type you are using for keys
+    /*private string newKey;   // Replace TKey with the actual type you are using for keys
     private float newValue; // Replace TValue with the actual type you are using for values
     public override void OnInspectorGUI()
     {
@@ -15,7 +15,7 @@ public class EnemyEditor : Editor
 
         if (enemy.dropTable == null)
         {
-            enemy.dropTable = new SerializedDictionary();
+            //enemy.dropTable = new SerializedDictionary();
         }
 
         // Custom UI for SerializedDictionary
@@ -46,7 +46,7 @@ public class EnemyEditor : Editor
                     RemoveItem(enemy.dropTable, item.Key.ToString());
                     i--;
                 }
-            }*/
+            }
             // Add more controls as needed...
 
             if (GUI.changed)
@@ -111,6 +111,6 @@ public class EnemyEditor : Editor
         else
         {
             Debug.LogWarning("Key not found.");
-        }*/
-    }
+        }
+    }*/
 }

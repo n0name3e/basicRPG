@@ -8,8 +8,6 @@ public class SerializableDictionaryObjectEditor : Editor
     private string newKey;
     private float newValue;
 
-    private List<string> keysList = new List<string>();
-    private List<float> valuesList = new List<float>();
     public override void OnInspectorGUI()
     {
         float keyWidth = (EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth - 60f) / 2.25f;

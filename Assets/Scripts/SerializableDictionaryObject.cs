@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Serializable Dictionary", menuName = "Custom/Serializable Dictionary")]
 public class SerializableDictionaryObject : ScriptableObject
 {
-    [SerializeField] private List<string> keys = new List<string>();
-    [SerializeField] private List<float> values = new List<float>();
+    public List<string> keys = new List<string>();
+    public List<float> values = new List<float>();
 
     // The actual dictionary
     public Dictionary<string, float> dictionary = new Dictionary<string, float>();

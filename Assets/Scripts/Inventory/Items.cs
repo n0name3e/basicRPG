@@ -30,7 +30,7 @@ public class Items: MonoBehaviour
 	{
 		for(int i = 0; i < items.Count; i++)
 		{
-			if (items[i].Name == name) return items[i];
+			if (items[i].Name.ToLower() == name.ToLower()) return items[i];
 		}
         return null;
 	}

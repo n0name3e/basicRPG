@@ -3551,6 +3551,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4184228649423344805, guid: a75c795a6c4d94a4ba0ece1c140c5f81,
         type: 3}
+      propertyPath: SerializableDictionaryObject
+      value: 
+      objectReference: {fileID: 11400000, guid: 1a4c635ca5a8ff1498abe1f6f908019b,
+        type: 2}
+    - target: {fileID: 4184228649423344805, guid: a75c795a6c4d94a4ba0ece1c140c5f81,
+        type: 3}
       propertyPath: dropTable.keys.Array.data[0]
       value: vasya
       objectReference: {fileID: 0}

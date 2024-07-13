@@ -34,7 +34,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
 
     //[SerializeField] public Dictionary<string, float> dropTable = new Dictionary<string, float>();
-    public SerializedDictionary dropTable { get; set; } = new SerializedDictionary(); //<string, float> dropTable;
+    //public SerializedDictionary dropTable { get; set; } = new SerializedDictionary(); //<string, float> dropTable;
+    public SerializableDictionaryObject dropTable;
     public List<Buff> buffs { get; set; } = new List<Buff>();
 
     public void Hit(float damage, IDamageable sender)
@@ -52,8 +53,19 @@ public class Enemy : MonoBehaviour, IDamageable
 	private void DropItems()
 	{
         print("drop00");
+        for (int i = 0; i < dropTable.keys.Count; i++)
+        {
+            print("dropping");
+            if (Random.Range(0, 1) < dropTable.values[i])
+            {
+                GameObject box = Instantiate(Resources.Load<GameObject>("ItemBox"), transform.position, Quaternion.identity);
+                string name = dropTable.keys[i];
+                print(box);
+                box.AddComponent<ItemObject>().item = Items.Instance.FindItem(name);
+            }
+        }
 		//for (int i = 0; i < dropTable.Count; i++)
-        foreach (KeyValuePair<string, float> item in dropTable.dictionary)
+        /*foreach (KeyValuePair<string, float> item in dropTable.dictionary)
 		{
             print("dropping");
 			if (Random.Range(0, 1) < dropTable.dictionary[item.Key])
@@ -63,7 +75,7 @@ public class Enemy : MonoBehaviour, IDamageable
                 print(box);
                 box.AddComponent<ItemObject>().item = Items.Instance.FindItem(name);            
 			}
-		}
+		}*/
 	}
     private void Start()
     {
