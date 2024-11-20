@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 462258301186612649}
   - component: {fileID: 462258301186612647}
   - component: {fileID: 462258301186612648}
+  - component: {fileID: 3864633701281148388}
   - component: {fileID: 6507561844134801421}
   - component: {fileID: 6680379665715758057}
   - component: {fileID: 6615725414135283956}
@@ -101,6 +102,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 2386147699093350353, guid: 6579d1fb7b6f7204ea027e54edbc1027,
     type: 3}
+  knockbackCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  movementState: 0
+--- !u!114 &3864633701281148388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462258301186612650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d588eae08d91b694d8cbbdba0c0caf6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <maxHealth>k__BackingField: 100
+  <speed>k__BackingField: 5
+  <attackSpeed>k__BackingField: 1
+  <attackCooldown>k__BackingField: 1
+  <physicDamage>k__BackingField: 20
+  <magicDamage>k__BackingField: 30
+  <defense>k__BackingField: 0
 --- !u!114 &6507561844134801421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,12 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6622b1ab8660b424580a980e98e9354c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <maxHealth>k__BackingField: 100
-  <speed>k__BackingField: 5
-  <attackSpeed>k__BackingField: 1
-  <attackCooldown>k__BackingField: 1
-  <physicDamage>k__BackingField: 20
-  <magicDamage>k__BackingField: 30
 --- !u!114 &6615725414135283956
 MonoBehaviour:
   m_ObjectHideFlags: 0

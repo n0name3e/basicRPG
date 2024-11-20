@@ -22,7 +22,6 @@ public class BuffManager: MonoBehaviour
 		Buff existingBuff = FindBuff(buff.name, target);
 		if (existingBuff != null)
 		{
-			print("found buff");
 			existingBuff.TriggerUpdateEvent();
 			existingBuff.time = buff.duration;
 			return;
@@ -34,7 +33,6 @@ public class BuffManager: MonoBehaviour
 	}
 	public void RemoveBuff(Buff buff, IDamageable target, bool triggerEvent = true)
 	{
-		print($"{target.Transform.name} had their debuff { buff.name } Removed! ");
 		target.buffs.Remove(FindBuff(buff.name, target));
 		if (triggerEvent) 
 			buff.TriggerRemoveEvent();

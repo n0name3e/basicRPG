@@ -15,7 +15,7 @@ public class Weapons: MonoBehaviour
 		fireStaff.OnHit = FireStaffHit;
 		GameManager.Instance.Player.ChangeWeapon(fireStaff);
 	}
-	private void FireStaffHit(Enemy target)
+	private void FireStaffHit(IDamageable target)
 	{
 		Buff fire = new Buff("FireStaffFire", 2f, target);
 		Buff fireTimer = new Buff("FireStaffFireTimer", 0.5f, target, true);

@@ -19,7 +19,6 @@ public class Tooltip : MonoBehaviour
     }
     private void Update()
     {
-        print(rt);
         if (gameObject.activeInHierarchy) SetTooltipPosition();
     }
     public void HideTooltip()

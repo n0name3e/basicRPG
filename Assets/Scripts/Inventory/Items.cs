@@ -7,6 +7,7 @@ public class Items: MonoBehaviour
 
     public Item stone;
     public Item healingPotion;
+    public Equipment helm;
 
 	private List<Item> items = new List<Item>();
 	
@@ -21,6 +22,7 @@ public class Items: MonoBehaviour
         healingPotion.OnUse.AddListener(UseHealingPotion);
 		items.Add(stone);
 		items.Add(healingPotion);
+        items.Add(helm);
     }
     private void UseHealingPotion(GameObject player)
     {

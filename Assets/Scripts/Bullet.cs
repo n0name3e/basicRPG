@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
@@ -25,8 +23,9 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        if (enemy != null)
+        //Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        IDamageable enemy = collision.gameObject.GetComponent<IDamageable>();
+        if (enemy != null && enemy != sender)
         {
             OnHit?.Invoke(enemy);
             enemy.Hit(damage, sender);

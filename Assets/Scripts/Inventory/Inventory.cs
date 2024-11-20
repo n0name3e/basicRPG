@@ -8,6 +8,13 @@ public class Inventory : MonoBehaviour
     private Player player;
     public List<Item> items { get; private set; } = new List<Item>();
 	public List<Weapon> weapons { get; private set; } = new List<Weapon>();
+    public Dictionary<EquipmentSlot, Equipment> equipment = new Dictionary<EquipmentSlot, Equipment>()
+    {
+        { EquipmentSlot.Head, null },
+        { EquipmentSlot.Chest, null },
+        { EquipmentSlot.Legs, null }
+    };
+    
 
     private void Awake()
     {
@@ -18,13 +25,13 @@ public class Inventory : MonoBehaviour
     public void AddItem(Item item)
     {
         items.Add(item);
-        ApplyItemStats(item);
+        //ApplyArmorStats(item);
         UI.Instance.UpdateItems();
     }
     public void RemoveItem(Item item)
     {
         items.Remove(item);
-        RemoveItemStats(item);
+        //RemoveArmorStats(item);
         UI.Instance.UpdateItems();
     }
 	public void ChangeWeapon(Weapon weapon)
@@ -39,14 +46,45 @@ public class Inventory : MonoBehaviour
         }
         return null;
     }
-    private void ApplyItemStats(Item item)
+    public void EquipArmor(Equipment armor)
     {
-        PlayerStats stats = player.PlayerStats;
-        stats.physicDamage += item.gainedStats.physicDamage;
+        if (equipment[armor.equipmentSlot] != null)
+        {
+            AddItem(equipment[armor.equipmentSlot]);
+        }
+        equipment[armor.equipmentSlot] = armor;
+        ApplyArmorStats(armor);
+        UI.Instance.UpdateArmor(armor.equipmentSlot);
     }
-    private void RemoveItemStats(Item item)
+    public void UnEquipArmor(EquipmentSlot slot)
     {
-        PlayerStats stats = player.PlayerStats;
-        stats.physicDamage -= item.gainedStats.physicDamage;
+        Equipment armor = equipment[slot];
+        RemoveArmorStats(armor);
+        AddItem(armor);
+        equipment[slot] = null;
+    }
+    private void ApplyArmorStats(Equipment armor)
+    {
+        Dictionary<StatType, float> stats = player.PlayerStats.Stats;
+        Dictionary<StatType, float> armorStats = armor.statsDictionary;
+        for (int i = 0; i < armor.statsDictionary.Count; i++)
+        {
+            StatType type = (StatType)i;
+            stats[type] += armorStats[type];
+        }
+        UI.Instance.ShowPlayerStats();
+        UI.Instance.UpdateHealthBar();
+    }
+    private void RemoveArmorStats(Equipment armor)
+    {
+        Dictionary<StatType, float> stats = player.PlayerStats.Stats;
+        Dictionary<StatType, float> armorStats = armor.statsDictionary;
+        for (int i = 0; i < armor.statsDictionary.Count; i++)
+        {
+            StatType type = (StatType)i;
+            stats[type] -= armorStats[type];
+        }
+        UI.Instance.ShowPlayerStats();
+        UI.Instance.UpdateHealthBar();
     }
 }

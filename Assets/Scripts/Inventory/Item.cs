@@ -10,7 +10,6 @@ public class Item: ScriptableObject
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public string Description { get; private set; }
     public Sprite image;
-    public ItemStats gainedStats; //{ get; private set; }
     public ItemEvent OnUse;
     /*public Item(string name)
     {
@@ -19,7 +18,13 @@ public class Item: ScriptableObject
     }*/
     public void UseItem()
     {
-        OnUse?.Invoke(GameManager.Instance.Player.gameObject);
+        if (this is Equipment)  // sounds funny lol, i want to have class Sparta 
+        {
+            Inventory.Instance.EquipArmor((Equipment)this);
+        }
+        else
+            OnUse?.Invoke(GameManager.Instance.Player.gameObject);
         Inventory.Instance.RemoveItem(this);
+        FindObjectOfType<Tooltip>().HideTooltip();
     }
 }

@@ -13,15 +13,8 @@ MonoBehaviour:
   m_Name: Healing Potion
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Healing Potion
-  <Description>k__BackingField: Restores 25 health
+  <Description>k__BackingField: Restores 25 hp
   image: {fileID: 21300000, guid: 0c24b292f9c77404e967385f0cd792a0, type: 3}
-  gainedStats:
-    maxHealth: 0
-    speed: 0
-    attackSpeed: 0
-    attackCooldown: 0
-    physicDamage: 0
-    magicDamage: 0
   OnUse:
     m_PersistentCalls:
       m_Calls: []

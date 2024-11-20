@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -7,15 +6,18 @@ public class Player : MonoBehaviour, IDamageable
 {
 
     private int nextLevelExperience;
-    public float health { get; set; }
+    private float health;
+    public float Health { get => health; set => health = value; }
     public List<Ability> Abilities { get; set; } = new List<Ability>();
     public int Level { get; set; } = 1;
     public int Experience { get; private set; } = 0;
     public PlayerStats PlayerStats { get; private set; }
+    private StartingPlayerStats startingPlayerStats;
 
-	public List<Buff> buffs { get; set; } = new List<Buff>();
+    public List<Buff> buffs { get; set; } = new List<Buff>();
 
     private PlayerMovement _movement;
+
     public Transform Transform { get; set; }
 
     public Weapon weapon { get; private set; }
@@ -26,6 +28,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         PlayerStats = GetComponent<PlayerStats>();
         _movement = GetComponent<PlayerMovement>();
+        startingPlayerStats = GetComponent<StartingPlayerStats>();
     }
     private void Start()
     {
@@ -46,35 +49,38 @@ public class Player : MonoBehaviour, IDamageable
         };
         BuffManager.Instance.AddBuff(healthRegen, this);
         */
-        health = PlayerStats.maxHealth;
+        SetStartingStats();
+        Health = PlayerStats.maxHealth;
     }
-	private void Update()
-	{
-		BuffManager.Instance.UpdateBuffs(this);
-	}
+    private void Update()
+    {
+        BuffManager.Instance.UpdateBuffs(this);
+    }
 
     public void Hit(float damage, IDamageable attacker)
     {
-        health -= damage;
+        float trueDamage = damage - PlayerStats.defense;
+        trueDamage = (trueDamage < 1) ? 1 : trueDamage;
+        Health -= trueDamage;
         UI.Instance.UpdateHealthBar();
-        if (health <= 0) Destroy(gameObject);
         _movement.Knockback(transform.position - attacker.Transform.transform.position);
+        if (Health <= 0) Destroy(gameObject);
     }
     public void Heal(float amount)
     {
-        health = Mathf.Min(PlayerStats.maxHealth, health + amount);
+        Health = Mathf.Min(PlayerStats.maxHealth, Health + amount);
         UI.Instance.UpdateHealthBar();
     }
-	public void ChangeWeapon(Weapon weapon)
-	{
-		PlayerStats.attackCooldown = weapon.attackCooldown;
+    public void ChangeWeapon(Weapon weapon)
+    {
+        PlayerStats.attackCooldown = weapon.attackCooldown;
         PlayerStats.physicDamage = weapon.damage;
         this.weapon = weapon;
-	}
+    }
     public void AddXP(int xp)
     {
         Experience += xp;
-        CheckLevel();     
+        CheckLevel();
     }
     private void CheckLevel()
     {
@@ -88,5 +94,15 @@ public class Player : MonoBehaviour, IDamageable
         Level++;
         Experience -= nextLevelExperience;
         nextLevelExperience = GameManager.Instance.GetNextLevelExperience(Level);
+    }
+    public void SetStartingStats()
+    {
+        PlayerStats.maxHealth = startingPlayerStats.maxHealth;
+        PlayerStats.speed = startingPlayerStats.speed;
+        PlayerStats.attackSpeed = startingPlayerStats.attackSpeed;
+        PlayerStats.attackCooldown = startingPlayerStats.attackCooldown;
+        PlayerStats.physicDamage = startingPlayerStats.physicDamage;
+        PlayerStats.magicDamage = startingPlayerStats.magicDamage;
+        PlayerStats.defense = startingPlayerStats.defense;
     }
 }

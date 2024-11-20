@@ -11,9 +11,10 @@ public class Weapon: ScriptableObject
     
 	public float damage;
 	public float attackCooldown; // can be multiplied by attack speed
-	public delegate void AttackEvent(Enemy target);
+	public bool isMelee = true;
+	public delegate void AttackEvent(IDamageable target);
 	public AttackEvent OnAttack;
-	public delegate void HitEvent(Enemy target);
+	public delegate void HitEvent(IDamageable target);
 	public HitEvent OnHit;
 	public UnityEngine.Events.UnityEvent Onht;
 }

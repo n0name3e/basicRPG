@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
         Inventory.Instance.AddItem(Items.Instance.stone);
         Inventory.Instance.AddItem(Items.Instance.healingPotion);
         Inventory.Instance.AddItem(Items.Instance.healingPotion);
+        Inventory.Instance.AddItem(Items.Instance.helm);
         SpawnEnemy();
     }
     public void SpawnEnemy()

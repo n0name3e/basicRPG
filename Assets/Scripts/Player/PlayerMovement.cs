@@ -56,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
         }
         if(Input.GetMouseButtonDown(0))
         {
+            if (player.weapon.isMelee)
+
             Shoot();
         }
     }
@@ -70,6 +72,10 @@ public class PlayerMovement : MonoBehaviour
         knockbackDirection = direction.normalized;
         knockbackDirection = new Vector2(transform.position.x, transform.position.y) + knockbackDirection;
         movementState = PlayerMovementState.Knockbacked;
+    }
+    private void Attack()
+    {
+
     }
     private void Shoot()
     {
