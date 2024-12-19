@@ -14,10 +14,10 @@ public class GameManager : MonoBehaviour
     {
         Player = FindObjectOfType<Player>();
         yield return null;
-        Inventory.Instance.AddItem(Items.Instance.stone);
-        Inventory.Instance.AddItem(Items.Instance.healingPotion);
-        Inventory.Instance.AddItem(Items.Instance.healingPotion);
-        Inventory.Instance.AddItem(Items.Instance.helm);
+        Inventory.Instance.AddItem(ItemManager.Instance.FindItem("stone"));
+        Inventory.Instance.AddItem(ItemManager.Instance.FindItem("healing potion"));
+        Inventory.Instance.AddItem(ItemManager.Instance.FindItem("healing potion"));
+        Inventory.Instance.AddItem(ItemManager.Instance.FindItem("helm"));
         SpawnEnemy();
     }
     public void SpawnEnemy()

@@ -24,6 +24,5 @@ public class Equipment : Item
         statsDictionary[StatType.AttackCooldown] = gainedStats.attackCooldown;
         statsDictionary[StatType.PhysicDamage] = gainedStats.physicDamage;
         statsDictionary[StatType.MagicDamage] = gainedStats.magicDamage;
-        MonoBehaviour.print(statsDictionary[StatType.MaxHealth]);
     }
 }

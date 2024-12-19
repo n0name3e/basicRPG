@@ -102,7 +102,7 @@ public class AbilityManager : MonoBehaviour
         button.AddComponent<RectTransform>();
         button.transform.SetParent(container);
         button.AddComponent<Image>();
-        Sprite sprite = Resources.Load<Sprite>("abilityIcons/" + ability.name);
+        Sprite sprite = Resources.Load<Sprite>("AbilityIcons/" + ability.name);
         if (sprite != null)
         {
             button.GetComponent<Image>().sprite = sprite;

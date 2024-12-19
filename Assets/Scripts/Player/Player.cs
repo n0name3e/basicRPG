@@ -75,7 +75,9 @@ public class Player : MonoBehaviour, IDamageable
     {
         PlayerStats.attackCooldown = weapon.attackCooldown;
         PlayerStats.physicDamage = weapon.damage;
+        print(weapon == null);
         this.weapon = weapon;
+        this.weapon.OnHit = weapon.OnHit;
     }
     public void AddXP(int xp)
     {

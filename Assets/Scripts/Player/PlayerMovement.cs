@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if(Input.GetMouseButtonDown(0))
         {
-            if (player.weapon.isMelee)
+            //if (player.weapon.isMelee)
 
             Shoot();
         }

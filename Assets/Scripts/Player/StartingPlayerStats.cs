@@ -2,11 +2,11 @@
 
 public class StartingPlayerStats : MonoBehaviour
 {
-    [field: SerializeField] public float maxHealth { get; set; } = 100f;
-    [field: SerializeField] public float speed { get; set; } = 5f;
-    [field: SerializeField] public float attackSpeed { get; set; } = 1f;
-    [field: SerializeField] public float attackCooldown { get; set; } = 1f;
-    [field: SerializeField] public float physicDamage { get; set; } = 20f;
-    [field: SerializeField] public float magicDamage { get; set; } = 30f;
-    [field: SerializeField] public float defense { get; set; } = 0f;
+    public float maxHealth = 100f;
+    public float speed = 5f;
+    public float attackSpeed = 1f;
+    public float attackCooldown = 1f;
+    public float physicDamage = 20f;
+    public float magicDamage = 30f;
+    public float defense = 0f;
 }

@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour, IDamageable
                 GameObject box = Instantiate(Resources.Load<GameObject>("ItemBox"), transform.position, Quaternion.identity);
                 string name = dropTable.keys[i];
                 print(box);
-                box.AddComponent<ItemObject>().item = Items.Instance.FindItem(name);
+                box.AddComponent<ItemObject>().item = ItemManager.Instance.FindItem(name);
             }
         }
 		//for (int i = 0; i < dropTable.Count; i++)

@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 
 [System.Serializable]
-public class ItemEvent: UnityEvent<GameObject> { }
+public class ItemEvent: UnityEvent<GameObject> { } 
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Items/Item", order = 1)]
 public class Item: ScriptableObject
@@ -18,7 +18,7 @@ public class Item: ScriptableObject
     }*/
     public void UseItem()
     {
-        if (this is Equipment)  // sounds funny lol, i want to have class Sparta 
+        if (this is Equipment)  // sounds funny lol
         {
             Inventory.Instance.EquipArmor((Equipment)this);
         }

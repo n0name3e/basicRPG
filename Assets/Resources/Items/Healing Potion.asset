@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84980dc7206f514287af15326c528ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 494f677590728b644ae36991ac0c596f, type: 3}
   m_Name: Healing Potion
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Healing Potion
