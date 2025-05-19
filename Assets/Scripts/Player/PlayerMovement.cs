@@ -1,94 +1,163 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum PlayerMovementState
 {
     Moving,
-    Knockbacked
+    Attacking,
+    Knockbacked,
+    Dashing
 }
 public class PlayerMovement : MonoBehaviour
 {
     private Player player;
+    private Rigidbody2D rb;
+    private SwordAnimatorHandler swordAnimatorHandler;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private AnimationCurve knockbackCurve;
+    [SerializeField] private Transform swordContainer;
+
     public PlayerMovementState movementState;
 
     private Vector2 originalKnockbackPosition;
     private Vector2 knockbackDirection;
     private float knockbackTimer = 0f;
+
+    private Vector3 originalDashPosition;
+    private Vector3 dashDirection;
+    private float dashTimer = 0f; // used for dash duration and cooldown
     
     private float attackTimer = 0f;
+    private float playerAttackRotation = 0f;
+
 
     private void Awake()
     {
         player = GetComponent<Player>();
+        rb = GetComponent<Rigidbody2D>();
+        swordAnimatorHandler = GetComponentInChildren<SwordAnimatorHandler>();
     }
     private void Update()
     {
-        Move();
+        //CheckMovementState();
         attackTimer -= Time.deltaTime;
+        dashTimer += Time.deltaTime;
+        Move();
+        if (movementState != PlayerMovementState.Attacking)
+        {
+            RotateTowardsMouse();
+        }
+        else // to fix the stupid bug where the player rotates while attacking i hate this bug as well as this piece of code
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, playerAttackRotation));
+        }
+        if (Input.GetMouseButtonDown(0) && movementState == PlayerMovementState.Moving
+            && !EventSystem.current.IsPointerOverGameObject())
+        {
+            if (player.meleeEquipped)
+                Attack();
+            else 
+                Shoot();
+        }
     }
-
-    private void Move()
+    private void FixedUpdate()
+    {
+        CheckMovementState();
+    }
+    private void CheckMovementState()
     {
         if (movementState == PlayerMovementState.Knockbacked)
         {
-            transform.position = Vector3.Lerp(originalKnockbackPosition, knockbackDirection, knockbackCurve.Evaluate(knockbackTimer * 2.5f));
-            knockbackTimer += Time.deltaTime;
-            if (knockbackTimer >= 1f/2.5f) movementState = PlayerMovementState.Moving;
+            rb.MovePosition(Vector2.Lerp(originalKnockbackPosition, 
+                (originalKnockbackPosition + knockbackDirection * (player.PlayerStats.Speed / 2f)), knockbackCurve.Evaluate(knockbackTimer * 2.5f)));
+
+            knockbackTimer += Time.fixedDeltaTime;
+            if (knockbackTimer >= 1f / 2.5f) 
+                movementState = PlayerMovementState.Moving;
             return;
         }
-        float movementSpeed = player.PlayerStats.speed;
-        if (Input.GetKey(KeyCode.W))
+        if (movementState == PlayerMovementState.Dashing)
         {
-            transform.Translate(0, movementSpeed * Time.deltaTime, 0); // y++
+            rb.MovePosition(Vector2.Lerp(originalDashPosition,
+               (originalDashPosition + dashDirection * (player.PlayerStats.Speed / 2f)), knockbackCurve.Evaluate(dashTimer * 4f)));
+            if (dashTimer >= 1f / 4f)
+                movementState = PlayerMovementState.Moving;
+            return;
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(-movementSpeed * Time.deltaTime, 0, 0); // x--
-        }
-        if(Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(0, -movementSpeed * Time.deltaTime, 0); // y--
-        }
-        if(Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(movementSpeed * Time.deltaTime, 0, 0); // x++
-        }
-        if(Input.GetMouseButtonDown(0))
-        {
-            //if (player.weapon.isMelee)
 
-            Shoot();
-        }
+        // otherwise just move
+        rb.MovePosition(rb.position + (GetMovementDirection() * player.PlayerStats.Speed * Time.fixedDeltaTime));
     }
-    private void CheckMove()
+    private Vector2 GetMovementDirection()
     {
+        float moveX = 0;
+        float moveY = 0;
+        if (Input.GetKey(KeyCode.W)) moveY += 1f;
+        if (Input.GetKey(KeyCode.S)) moveY -= 1f;
+        if (Input.GetKey(KeyCode.A)) moveX -= 1f;
+        if (Input.GetKey(KeyCode.D)) moveX += 1f;
 
+        return new Vector2(moveX, moveY).normalized;
     }
+    private void Move()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && movementState == PlayerMovementState.Moving && dashTimer >= player.PlayerStats.DashCooldown)
+        {
+            dashTimer = 0f;
+            originalDashPosition = transform.position;
+            
+            dashDirection = GetMovementDirection();
+            movementState = PlayerMovementState.Dashing;
+            return;
+        }
+
+        //transform.Translate(new Vector2(moveX, moveY).normalized * movementSpeed * Time.deltaTime);
+    }
+
     public void Knockback(Vector2 direction)
     {
         knockbackTimer = 0f;
         originalKnockbackPosition = transform.position;
         knockbackDirection = direction.normalized;
-        knockbackDirection = new Vector2(transform.position.x, transform.position.y) + knockbackDirection;
         movementState = PlayerMovementState.Knockbacked;
     }
-    private void Attack()
+    private void RotateTowardsMouse()
     {
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = 5.23f;
+        Vector3 playerPos = Camera.main.WorldToScreenPoint(player.transform.position);
+        mousePos.x -= playerPos.x;
+        mousePos.y -= playerPos.y;
+        float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+    }
+    private void Attack() // for melee attack 
+    {
+        if (player.Stamina < player.inventory.equippedSword.staminaCost)
+            return;
 
+        player.ExpendStamina(player.inventory.equippedSword.staminaCost);
+
+        playerAttackRotation = transform.rotation.eulerAngles.z;
+        movementState = PlayerMovementState.Attacking;
+        swordAnimatorHandler.PlayAnimation(player.inventory.equippedSword.swingAnimationName);
+        
     }
     private void Shoot()
     {
-        if (attackTimer >= 0) return;
+        if (attackTimer > 0 || player.Mana < player.inventory.equippedStaff.manaCost) 
+            return;
+
+        player.SpendMana(player.inventory.equippedStaff.manaCost);
+
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
         Vector3 direction = (mousePosition - transform.position).normalized;
 
         GameObject bulletObject = Instantiate(bulletPrefab, transform.position, transform.rotation);
         Bullet bullet = bulletObject.AddComponent<Bullet>();
-        bullet.Launch(direction, 20f, GetComponent<IDamageable>(), player.PlayerStats.physicDamage);
-        bullet.OnHit = player.weapon.OnHit;
-        attackTimer = player.PlayerStats.attackCooldown / player.PlayerStats.attackSpeed;
+        bullet.Launch(direction, 20f, GetComponent<IDamageable>(), player.PlayerStats.MagicalDamage, player.inventory.equippedStaff);
+        attackTimer = player.PlayerStats.AttackCooldown / player.PlayerStats.AttackSpeed;
         UI.Instance.UpdateAttackBar();
     }
 }

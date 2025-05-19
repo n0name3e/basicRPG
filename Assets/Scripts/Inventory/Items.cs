@@ -6,3 +6,10 @@ public class Items: ScriptableObject
 {
 	public List<Item> items = new List<Item>();
 }
+
+[System.Serializable]
+public class StatModifier
+{
+    public StatType type;
+    public float value;
+}

@@ -74,7 +74,20 @@ public class EnemyAttacking : MonoBehaviour
     {
         Vector2 direction = (player.transform.position - transform.position).normalized;
 
-        GameObject bullet = Instantiate(Resources.Load<GameObject>("Projective"), transform.position, transform.rotation);
+        GameObject bullet = Instantiate(Resources.Load<GameObject>("Projectile"), transform.position, transform.rotation);
         bullet.AddComponent<Bullet>().Launch(direction, 15f, GetComponent<Enemy>(), GetComponent<Enemy>().damage);
+        
+        /*float angle = 0;
+        for (float i = 0; i <= 270; i += 90)
+        {
+            Vector2 direction = (player.transform.position - transform.position).normalized;
+            //Vector2 direction = Quaternion.Euler(0, 0, i) * Vector2.up;
+            //angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+            
+            //Vector2 direction = Quaternion.Euler(0, 0, i) * Vector2.up; //(player.transform.position - transform.position).normalized;
+            GameObject bullet = Instantiate(Resources.Load<GameObject>("Projectile"), transform.position, transform.rotation);
+            bullet.AddComponent<Bullet>().Launch(direction, 15f, GetComponent<Enemy>(), GetComponent<Enemy>().damage);
+            bullet.transform.Rotate(0, 0, i);
+        }*/
     }
 }

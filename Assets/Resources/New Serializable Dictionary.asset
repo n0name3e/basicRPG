@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: New Serializable Dictionary
   m_EditorClassIdentifier: 
   keys:
-  - stone
+  - helm
+  - healing potion
   values:
+  - 1
   - 1

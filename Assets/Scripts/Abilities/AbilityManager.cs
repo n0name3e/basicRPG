@@ -4,26 +4,27 @@ using UnityEngine.UI;
 
 public class AbilityManager : MonoBehaviour
 {
-    private static AbilityManager instance;
-    string jsonData;
     AbilityDataList abilityList;
-    public List<Ability> abilities = new List<Ability>();
+    //public List<Ability> abilities = new List<Ability>();
     private List<Ability> cooldowningAbilities = new List<Ability>();
     [SerializeField] private Transform container;
 
+    public Abilities abilities;
+
+    private Player player;
+
     Vector2 anchorPosition;
-    public static AbilityManager Instance { get => instance; set => instance = value; }
+    public static AbilityManager Instance { get; private set; }
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        jsonData = Resources.Load<TextAsset>("json/abilities").text;
-        abilityList = JsonUtility.FromJson<AbilityDataList>(jsonData);
+        player = FindObjectOfType<Player>();
     }
     void Start()
     {
-
+        CreateAbilityButtons();
     }
     private void Update()
     {
@@ -40,7 +41,7 @@ public class AbilityManager : MonoBehaviour
     }
     public void UpdateAbilityCooldown(Ability ability)
     {
-        ability.uiCooldownImage.fillAmount = ability.cooldown / ability.abilityData.cooldown;
+        ability.uiCooldownImage.fillAmount = ability.cooldown / ability.maxCooldown;
         if (ability.cooldown <= 0)
         {
             ability.uiCooldownText.text = "";
@@ -48,20 +49,34 @@ public class AbilityManager : MonoBehaviour
         }
         ability.uiCooldownText.text = Mathf.Ceil(ability.cooldown).ToString();
     }
-    public AbilityData FindAbility(string name)
+    public AbilityData FindAbilityData(string name)
     {
-        return abilityList.abilities.Find(x => x.name == name);
+        return abilityList.abilities.Find(x => x.name.ToLower() == name.ToLower());
+    }
+    public Ability FindAbility(string name)
+    {
+        return abilities.abilities.Find(x => x.name.ToLower() == name.ToLower());
+        /*foreach (Ability ability in abilities.abilities)
+        {
+            if (abilities.name.ToLower() == ability.name.ToLower())
+            {
+                return ability;
+            }
+        }
+        return null;*/
     }
 
     public void CastAbility(Ability ability)
     {
-        if (!ability.canBeCasted()) return;
-        ability.OnUntargetedAbilityChoose?.Invoke();
-        ability.cooldown = ability.abilityData.cooldown;
+        if (!ability.canBeCasted() || player.Mana < ability.manaCost) return;
+        ability.OnUntargetedAbilityChoose(player);
+        ability.cooldown = ability.maxCooldown;
         if (ability.cooldown > 0)
         {
+            print("add cooldowning ability");
             cooldowningAbilities.Add(ability);
         }
+        player.SpendMana(ability.manaCost);
         /*if (!ability.canBeCasted()) return;
         ability.OnGeneralAbilityTileChoose?.Invoke(tile);
 
@@ -91,9 +106,14 @@ public class AbilityManager : MonoBehaviour
     /// <param name="container">container of abilities</param>
     public void CreateAbilityButtons()
     {
-        foreach (Ability ability in FindObjectOfType<Player>().Abilities)
+        /*foreach (Transform obj in container)
+        {
+            Destroy(obj);
+        }*/
+        foreach (Ability ability in player.Abilities)
         {
             CreateAbility(ability);
+            UpdateAbilityCooldown(ability);
         }
     }
     private void CreateAbility(Ability ability)
@@ -102,7 +122,7 @@ public class AbilityManager : MonoBehaviour
         button.AddComponent<RectTransform>();
         button.transform.SetParent(container);
         button.AddComponent<Image>();
-        Sprite sprite = Resources.Load<Sprite>("AbilityIcons/" + ability.name);
+        Sprite sprite = ability.icon;
         if (sprite != null)
         {
             button.GetComponent<Image>().sprite = sprite;
@@ -196,7 +216,7 @@ public class AbilityManager : MonoBehaviour
         text.alignment = TextAnchor.MiddleCenter;
         text.text = currentCooldown.ToString();
         text.fontSize = 50;
-        text.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+        text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         ability.uiCooldownImage = image;
         ability.uiCooldownText = text;
     }

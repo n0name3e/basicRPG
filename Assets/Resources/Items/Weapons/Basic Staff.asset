@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a3c3b7bdb75eb848943074b260e7e4b, type: 3}
+  m_Name: Basic Staff
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Basic Staff
+  <Description>k__BackingField: 
+  image: {fileID: 21300000, guid: 1fc188e4f88ac114eb2372d1e4010f03, type: 3}
+  attackCooldown: 0.8
+  magicDamage: 30
+  manaCost: 0

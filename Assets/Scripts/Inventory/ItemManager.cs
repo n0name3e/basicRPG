@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
-    public Items Items;
+    public Items Items; // Items
+
     public static ItemManager Instance { get; private set; }
 
     private void Awake()

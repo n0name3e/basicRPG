@@ -5,65 +5,81 @@ using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
     public static UI Instance { get; private set; }
+    public StatBars StatBars { get; private set; }
 
-    [Header("Meow")]
+    public Text debugText;
 
-    [SerializeField] private GameObject hpBar;
+    [Header("MEOW")]
+
     [SerializeField] private GameObject attackBar;
-    [SerializeField] private Text physicDamageText;
+    [SerializeField] private Text physicalDamageText;
     [SerializeField] private Text magicDamageText;
-	[SerializeField] private GameObject weaponImage;
 
     [Space(5)]
-    [Header("Stats")]
+    [Header("STATS")]
     [Space(10)]
 
     [SerializeField] private GameObject statsWindow;
     [SerializeField] private Text s_hpText;
-    [SerializeField] private Text s_physicDamageText;
-    [SerializeField] private Text s_magicDamageText;
+    [SerializeField] private Text s_physicalDamageText;
+    [SerializeField] private Text s_magicalDamageText;
     [SerializeField] private Text s_movementSpeedText;
-    [SerializeField] private Text s_attackSpeed;
+    [SerializeField] private Text s_attackSpeedText;
+    [SerializeField] private Text s_defenseText;
 
     [SerializeField] private GameObject inventoryWindow;   
     [SerializeField] private Tooltip inventoryTooltip;
 
     [Space(5)]
-    [Header("Equipment")]
+    [Header("EQUIPMENT")]
     [Space(10)]
     [SerializeField] private GameObject equipmentWindow;
+    [SerializeField] private GameObject swordImage;
+    [SerializeField] private GameObject staffImage;
     [SerializeField] private GameObject headArmor;
     [SerializeField] private GameObject bodyArmor;
     [SerializeField] private GameObject legArmor;
 
+    [Space(5)]
+    [SerializeField] private GameObject swordOutline; // enable when sword is chosen
+    [SerializeField] private GameObject staffOutline; // enable when staff is chosen
 
-    private Player _player;
+    private Dictionary<EquipmentSlot, GameObject> equipmentObject = new Dictionary<EquipmentSlot, GameObject>();
+
+    private Player player;
+
+    private GameObject itemObjectUI;
+    private List<GameObject> itemObjectsPool = new List<GameObject>();
 
     private void Awake()
     {
         if (Instance != null) Destroy(gameObject);
         else Instance = this;
-        _player = FindObjectOfType<Player>();
+        player = FindObjectOfType<Player>();
+        StatBars = GetComponent<StatBars>();
     }
     private void Start()
     {
+        UpdatePhysicalDamageText();
+        UpdateMagicalDamageText();
+        StatBars.UpdateHpBar();
+        StatBars.UpdateManaBar();
+        StatBars.UpdateStaminaBar();
 
-        UpdatePhysicDamageText();
-        UpdateMagicDamageText();
-        UpdateHealthBar();
+        equipmentObject[EquipmentSlot.Head] = headArmor;
+        equipmentObject[EquipmentSlot.Body] = bodyArmor;
+        equipmentObject[EquipmentSlot.Legs] = legArmor;
+
+        itemObjectUI = (GameObject) Resources.Load("ItemUI");
     }
     private void Update()
     {
         UpdateAttackBarTimer();
     }
-    public void UpdateHealthBar()
-    {
-        hpBar.transform.GetChild(1).GetComponent<Image>().fillAmount = _player.Health / _player.PlayerStats.maxHealth;
-        hpBar.transform.GetChild(2).GetComponent<Text>().text = $"{_player.Health}/{_player.PlayerStats.maxHealth}";
-    }
+    
     public void UpdateEnemyHpBar(Enemy enemy)
     {
-        enemy.transform.GetChild(0).GetChild(1).GetComponent<Image>().fillAmount = enemy.health / enemy.maxHealth;
+        enemy.transform.GetChild(0).GetChild(1).GetComponent<Image>().fillAmount = enemy.Health / enemy.maxHealth;
     }
     public void UpdateAttackBar()
     {
@@ -74,16 +90,16 @@ public class UI : MonoBehaviour
         Image bar = attackBar.transform.GetChild(0).GetComponent<Image>();
         if (bar.fillAmount > 0)
         {
-            bar.fillAmount -= Time.deltaTime / _player.PlayerStats.attackCooldown * _player.PlayerStats.attackSpeed;
+            bar.fillAmount -= Time.deltaTime / player.PlayerStats.AttackCooldown * player.PlayerStats.AttackSpeed;
         }
     }
-    public void UpdatePhysicDamageText()
+    public void UpdatePhysicalDamageText()
     {
-        physicDamageText.text = _player.PlayerStats.physicDamage.ToString();
+        physicalDamageText.text = player.PlayerStats.GetStat(StatType.PhysicalDamage).ToString();
     }
-    public void UpdateMagicDamageText()
+    public void UpdateMagicalDamageText()
     {
-        magicDamageText.text = _player.PlayerStats.magicDamage.ToString();
+        magicDamageText.text = player.PlayerStats.GetStat(StatType.MagicalDamage).ToString();
     }
     public void ShowStats()
     {
@@ -96,53 +112,106 @@ public class UI : MonoBehaviour
     private void OpenStats()
     {
         GameManager.Instance.Pause();
-        ShowPlayerStats();
+        UpdatePlayerStats();
 
-        hpBar.GetComponent<RectTransform>().Translate(new Vector2(statsWindow.GetComponent<RectTransform>().sizeDelta.x
-            + equipmentWindow.GetComponent<RectTransform>().sizeDelta.x, 0));
+        StatBars.TranslateBars(statsWindow.GetComponent<RectTransform>().sizeDelta.x
+            + equipmentWindow.GetComponent<RectTransform>().sizeDelta.x);
+        //hpBar.GetComponent<RectTransform>().Translate(new Vector2(statsWindow.GetComponent<RectTransform>().sizeDelta.x
+        //    + equipmentWindow.GetComponent<RectTransform>().sizeDelta.x, 0));
     }
-
-    public void ShowPlayerStats()
+    public void UpdatePlayerStats()
     {
-        PlayerStats playerStats = _player.PlayerStats;
-        s_hpText.text = Mathf.Ceil(playerStats.maxHealth).ToString();
-        s_physicDamageText.text = Mathf.Ceil(playerStats.physicDamage).ToString();
-        s_magicDamageText.text = Mathf.Ceil(playerStats.magicDamage).ToString();
-        s_movementSpeedText.text = Mathf.Ceil(playerStats.speed).ToString();
-        s_attackSpeed.text = Mathf.Ceil(playerStats.attackSpeed).ToString();
+        PlayerStats playerStats = player.PlayerStats;
+        s_hpText.text = Mathf.Ceil(playerStats.MaxHealth).ToString();
+        s_physicalDamageText.text = Mathf.Ceil(playerStats.GetBaseStat(StatType.PhysicalDamage)).ToString() +
+    (playerStats.GetBonusStat(StatType.PhysicalDamage) != 0
+        ? $" {(playerStats.GetBonusStat(StatType.PhysicalDamage) > 0 ? "+" : "")}{playerStats.GetBonusStat(StatType.PhysicalDamage)}"
+        : "");
+        s_magicalDamageText.text = Mathf.Ceil(playerStats.GetBaseStat(StatType.MagicalDamage)).ToString() +
+    (playerStats.GetBonusStat(StatType.MagicalDamage) != 0
+        ? $" {(playerStats.GetBonusStat(StatType.MagicalDamage) > 0 ? "+" : "")}{playerStats.GetBonusStat(StatType.MagicalDamage)}"
+        : "");
+        s_movementSpeedText.text = Mathf.Ceil(playerStats.GetStat(StatType.Speed)).ToString();
+        s_attackSpeedText.text = (Mathf.Ceil(playerStats.GetStat(StatType.AttackSpeed) * 100) / 100).ToString();
+        s_defenseText.text = Mathf.Ceil(playerStats.GetStat(StatType.Defense)).ToString();
+
+        UpdatePhysicalDamageText();
+        UpdateMagicalDamageText();
     }
 
     private void CloseStats()
     {
-        hpBar.GetComponent<RectTransform>().Translate(new Vector2(-statsWindow.GetComponent<RectTransform>().sizeDelta.x
-            - equipmentWindow.GetComponent<RectTransform>().sizeDelta.x, 0));
+        StatBars.TranslateBars(-statsWindow.GetComponent<RectTransform>().sizeDelta.x
+            - equipmentWindow.GetComponent<RectTransform>().sizeDelta.x);
         GameManager.Instance.UnPause();
     }
-	public void ChangeWeapon(Weapon weapon)
+    public void ChangeWeapon(Weapon weapon)
 	{
-		if (weapon.icon != null)
+		if (weapon.image != null)
 		{
-			weaponImage.GetComponent<Image>().sprite = weapon.icon;			
-		}
-		UpdatePhysicDamageText();
-	}
+            if (weapon is Sword)
+            {
+                swordImage.GetComponent<Image>().sprite = weapon.image;
+                swordImage.GetComponent<InventoryItemUI>().item = weapon;
+                UpdatePhysicalDamageText();
+            }
+            else if (weapon is Staff)
+            {
+                staffImage.GetComponent<Image>().sprite = weapon.image;
+                staffImage.GetComponent<InventoryItemUI>().item = weapon;
+                UpdateMagicalDamageText();
+            }
+        }
+        UpdatePlayerStats();
+    }
+    public void ActivateMeleeWeapon()
+    {
+        /*Image swordOutlineImage = swordOutline.GetComponent<Image>();
+        Color color = swordOutlineImage.color;
+        color.a = 1f;
+        swordOutlineImage.color = color; */
+
+        swordOutline.SetActive(true);
+        staffOutline.SetActive(false);
+        player.EquipWeapon(true);
+    }
+    public void ActivateMagicWeapon()
+    {
+        swordOutline.SetActive(false);
+        staffOutline.SetActive(true);
+        player.EquipWeapon(false);
+    }
     public void UpdateItems()
     {
         foreach (Transform gmObject in inventoryWindow.transform)
         {
+            //gmObject.gameObject.SetActive(false);
             Destroy(gmObject.gameObject);
         }
-        Inventory inventory = Inventory.Instance;
+        Inventory inventory = player.inventory;
         for (int i = 0; i < inventory.items.Count; i++)
         {
-            Item item = inventory.items[i];
-            GameObject itemObject = new GameObject(inventory.items[i].Name);
+            /*if (itemObjectsPool.Count <= i)
+            {
+                itemObject = Instantiate(itemObjectUI);
+                itemObjectsPool.Add(itemObject);
+                itemObject.transform.SetParent(inventoryWindow.transform);
+            }
+            else
+            {
+                itemObject = itemObjectsPool[i];
+                itemObject.SetActive(true);
+            }*/
+            GameObject itemObject = Instantiate(itemObjectUI);
             itemObject.transform.SetParent(inventoryWindow.transform);
-            Image image = itemObject.AddComponent<Image>();
+            Item item = inventory.items[i];
+
+            Image image = itemObject.GetComponent<Image>();
             image.sprite = item.image;
-            Button button = itemObject.AddComponent<Button>();
-            button.onClick.AddListener(delegate { item.UseItem(); });
-            InventoryItemUI itemUI = itemObject.AddComponent<InventoryItemUI>();
+            Button button = itemObject.GetComponent<Button>();
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => item.UseItem(player));
+            InventoryItemUI itemUI = itemObject.GetComponent<InventoryItemUI>();
             itemUI.item = item;
             itemUI.tooltip = inventoryTooltip;
         }
@@ -150,26 +219,23 @@ public class UI : MonoBehaviour
 
     public void UpdateArmor(EquipmentSlot equipmentSlot)
     {
-        Dictionary<EquipmentSlot, Equipment> equipment = Inventory.Instance.equipment;
-        if (equipmentSlot == EquipmentSlot.Head)
-        {
-            headArmor.GetComponent<Image>().sprite = equipment[EquipmentSlot.Head].image;
-            InventoryItemUI itemUI = headArmor.AddComponent<InventoryItemUI>();
-            itemUI.item = equipment[EquipmentSlot.Head];
-            itemUI.tooltip = inventoryTooltip;
-        }
+        Dictionary<EquipmentSlot, Equipment> equipment = player.inventory.equipment;
+
+        equipmentObject[equipmentSlot].GetComponent<Image>().sprite = equipment[equipmentSlot].image;
+        equipmentObject[equipmentSlot].GetComponent<InventoryItemUI>().item = equipment[equipmentSlot];
+        //itemUI.tooltip = inventoryTooltip;
     }
     public void UnequipArmor(int index) // called from button
     {
-        Inventory inventory = Inventory.Instance;
-        if (inventory.equipment[(EquipmentSlot) index] == null)
+        EquipmentSlot slot = (EquipmentSlot)index;
+        Inventory inventory = player.inventory;
+        if (inventory.equipment[slot] == null)
             return;
-        inventory.UnEquipArmor((EquipmentSlot) index);
-        if (index == 0)
-        {
-            headArmor.GetComponent<Image>().sprite = null;
-            headArmor.GetComponent<InventoryItemUI>().item = null;
-            headArmor.GetComponent<InventoryItemUI>().tooltip.HideTooltip();
-        }
+        inventory.UnEquipArmor(slot);
+
+        equipmentObject[slot].GetComponent<Image>().sprite = null;
+        equipmentObject[slot].GetComponent<InventoryItemUI>().item = null;
+        equipmentObject[slot].GetComponent<InventoryItemUI>().tooltip.HideTooltip();
+        UpdatePlayerStats();
     }
 }

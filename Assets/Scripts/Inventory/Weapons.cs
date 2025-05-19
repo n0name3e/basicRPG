@@ -4,18 +4,7 @@ public class Weapons: MonoBehaviour
 {
 	public Weapon basicStaff;
 	public Weapon fireStaff;
-	private System.Collections.IEnumerator Start()
-	{
-		/*fireStaff = new Weapon()
-		{
-			damage = 40,
-			OnHit = FireStaffHit
-		};*/
-		yield return null;
-		fireStaff.OnHit = FireStaffHit;
-		GameManager.Instance.Player.ChangeWeapon(fireStaff);
-	}
-	private void FireStaffHit(IDamageable target)
+	/*private void FireStaffHit(IDamageable target)
 	{
 		Buff fire = new Buff("FireStaffFire", 2f, target);
 		Buff fireTimer = new Buff("FireStaffFireTimer", 0.5f, target, true);
@@ -36,7 +25,7 @@ public class Weapons: MonoBehaviour
 			BuffManager.Instance.RemoveBuff(fireTimer, target, false);
 		};
 		BuffManager.Instance.AddBuff(fire, target);
-	}
+	}*/
 	public void meow()
     {
 

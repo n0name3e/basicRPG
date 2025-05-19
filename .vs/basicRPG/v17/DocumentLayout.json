@@ -1,0 +1,136 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "H:\\uunity\\basicRPG\\basicRPG\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|H:\\uunity\\basicRPG\\basicRPG\\assets\\scripts\\player\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\player\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|H:\\uunity\\basicRPG\\basicRPG\\assets\\scripts\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|H:\\uunity\\basicRPG\\basicRPG\\assets\\scripts\\inventory\\sword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\inventory\\sword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|H:\\uunity\\basicRPG\\basicRPG\\assets\\scripts\\ui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|H:\\uunity\\basicRPG\\basicRPG\\assets\\scripts\\inventory\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\inventory\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|H:\\uunity\\basicRPG\\basicRPG\\assets\\scripts\\enemy\\enemyattacking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\enemyattacking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|H:\\uunity\\basicRPG\\basicRPG\\assets\\scripts\\inventory\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4EA36432-8A84-08FF-D516-664C813A114F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\inventory\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "EnemyAttacking.cs",
+              "DocumentMoniker": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Enemy\\EnemyAttacking.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Enemy\\EnemyAttacking.cs",
+              "ToolTip": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Enemy\\EnemyAttacking.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Enemy\\EnemyAttacking.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAiwFcAAAB8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T14:48:50.708Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlayerMovement.cs",
+              "DocumentMoniker": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Player\\PlayerMovement.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Player\\PlayerMovement.cs",
+              "ToolTip": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Player\\PlayerMovement.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Player\\PlayerMovement.cs",
+              "ViewState": "AgIAAH0AAAAAAAAAAAAlwIcAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-03T10:36:11.028Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UI.cs",
+              "DocumentMoniker": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\UI.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI.cs",
+              "ToolTip": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\UI.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI.cs",
+              "ViewState": "AgIAAM0AAAAAAAAAAAAAAFEAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-02T09:47:38.631Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Staff.cs",
+              "DocumentMoniker": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Inventory\\Staff.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Inventory\\Staff.cs",
+              "ToolTip": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Inventory\\Staff.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Inventory\\Staff.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T16:50:54.767Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Sword.cs",
+              "DocumentMoniker": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Inventory\\Sword.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Inventory\\Sword.cs",
+              "ToolTip": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Inventory\\Sword.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Inventory\\Sword.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T16:50:36.044Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Player.cs",
+              "DocumentMoniker": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Player\\Player.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Player\\Player.cs",
+              "ToolTip": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Player\\Player.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Player\\Player.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAlwEsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T17:56:07.016Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Inventory.cs",
+              "DocumentMoniker": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Inventory\\Inventory.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Inventory\\Inventory.cs",
+              "ToolTip": "H:\\uunity\\basicRPG\\basicRPG\\Assets\\Scripts\\Inventory\\Inventory.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Inventory\\Inventory.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAlwFkAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-25T18:37:25.362Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

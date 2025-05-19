@@ -5,10 +5,15 @@ public class HealingPotion : Item
 {
     private void OnEnable()
     {
-        OnUse.AddListener(UseHealingPotion);
+        //OnUse.AddListener(UseHealingPotion);
     }
-    public void UseHealingPotion(GameObject player)
+    public void UseHealingPotion(Player player)
     {
-        player.GetComponent<Player>().Heal(25);
+        player.Heal(25);
+    }
+    public override void UseItem(Player player)
+    {
+        base.UseItem(player);
+        UseHealingPotion(player);
     }
 }

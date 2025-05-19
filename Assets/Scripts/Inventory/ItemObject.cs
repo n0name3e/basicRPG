@@ -4,12 +4,11 @@ public class ItemObject: MonoBehaviour
 {
 	public Item item;
 
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if (collision.GetComponent<Player>() != null)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+		if (collision.transform.GetComponent<Player>() != null)
 		{
-			print("collide");
-			Inventory.Instance.AddItem(item);
+            collision.transform.GetComponent<Player>().inventory.AddItem(item);
 			Destroy(gameObject);
 		}
 	}

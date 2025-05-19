@@ -15,7 +15,7 @@ public enum AttackType
 public class Enemy : MonoBehaviour, IDamageable
 {
     public float maxHealth { get; set; } = 100;
-    public float health { get; set; }
+    public float Health { get; set; }
     public float speed { get; set; } = 2;
 
     [field: SerializeField] public AttackType attackType = AttackType.Ranged;
@@ -40,9 +40,16 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void Hit(float damage, IDamageable sender)
     {
-        health -= damage;
+        Health -= damage;
         UI.Instance.UpdateEnemyHpBar(this);
-        if (health <= 0) Die();
+        CreateDamageText(Mathf.CeilToInt(damage));
+        if (Health <= 0) Die();
+    }
+    private void CreateDamageText(int damage)
+    {
+        GameObject textObject = Instantiate(new GameObject("-" + damage), transform.position + new Vector3(0, 4), Quaternion.identity);
+        UnityEngine.UI.Text text = textObject.AddComponent<UnityEngine.UI.Text>();
+        text.text = damage.ToString();
     }
     private void Die()
     {
@@ -50,17 +57,18 @@ public class Enemy : MonoBehaviour, IDamageable
         Destroy(gameObject);
         player.AddXP(experience);
     }
-	private void DropItems()
+    public void Heal(float amount)
+    {
+        Health = Mathf.Min(maxHealth, Health + amount);
+    }
+    private void DropItems()
 	{
-        print("drop00");
         for (int i = 0; i < dropTable.keys.Count; i++)
         {
-            print("dropping");
             if (Random.Range(0, 1) < dropTable.values[i])
             {
                 GameObject box = Instantiate(Resources.Load<GameObject>("ItemBox"), transform.position, Quaternion.identity);
                 string name = dropTable.keys[i];
-                print(box);
                 box.AddComponent<ItemObject>().item = ItemManager.Instance.FindItem(name);
             }
         }
@@ -81,7 +89,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         state = EnemyState.Patrolling;
         player = FindObjectOfType<Player>();
-        health = maxHealth;
+        Health = maxHealth;
         Transform = transform;
     }
     private void Update()
