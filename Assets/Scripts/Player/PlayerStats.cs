@@ -22,6 +22,7 @@ public class PlayerStats: MonoBehaviour
     public Dictionary<StatType, float> Stats = new Dictionary<StatType, float>();
     public Dictionary<StatType, float> BonusStats = new Dictionary<StatType, float>(); // modifiers
     private Player player;
+    private UI UI;
     
     public float MaxHealth
     {
@@ -59,6 +60,10 @@ public class PlayerStats: MonoBehaviour
         }
         player = GetComponent<Player>();
     }
+    private void Start()
+    {
+        UI = UI.Instance;
+    }
     public float GetStat(StatType statType)
     {
         return Stats[statType] + BonusStats[statType];
@@ -93,8 +98,12 @@ public class PlayerStats: MonoBehaviour
         player.Mana = Mathf.Min(player.Mana, GetStat(StatType.MaxMana));
         player.Stamina = Mathf.Min(player.Stamina, GetStat(StatType.MaxStamina));
 
-        UI.Instance.StatBars.UpdateHpBar();
-        UI.Instance.StatBars.UpdateManaBar();
-        UI.Instance.StatBars.UpdateStaminaBar();
+        UI.StatBars.UpdateHpBar();
+        UI.StatBars.UpdateManaBar();
+        UI.StatBars.UpdateStaminaBar();
+
+        UI.UpdatePlayerStats();
+        UI.UpdatePhysicalDamageText();
+        UI.Instance.UpdateMagicalDamageText();
     }
 }

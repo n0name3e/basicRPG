@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a6913d6f9f188b44b1d79213504cbe6, type: 3}
+  m_Name: Deathray
+  m_EditorClassIdentifier: 
+  name: Deathray
+  icon: {fileID: 21300000, guid: c52c31b021a01c940b55b9ef32d17adf, type: 3}
+  maxCooldown: 10
+  cooldown: -0.00000019278377
+  manaCost: 50
+  damageMultiplier: 1
+  passive: 0
+  targeted: 1
+  uiCooldownText: {fileID: 0}
+  uiCooldownImage: {fileID: 0}
+  abilityData:
+    name: 
+    targeted: 0
+    manaCost: 0
+    damageMultiplier: 0
+    cooldown: 0
+    active: 0
+    properties: []
+    chargesConditions: []
+  rayLifetime: 2
+  rayAttackInterval: 0.2
+  rayDamageMultiplier: 0.1

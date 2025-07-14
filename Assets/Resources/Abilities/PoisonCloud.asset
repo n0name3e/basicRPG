@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c700d93eef5114ab2f4550c6a13730, type: 3}
+  m_Name: PoisonCloud
+  m_EditorClassIdentifier: 
+  name: Poison Cloud
+  icon: {fileID: 21300000, guid: 141175617646af2428877ee538d718cb, type: 3}
+  maxCooldown: 2
+  cooldown: -0.0016320217
+  manaCost: 20
+  damageMultiplier: 0.5
+  passive: 0
+  targeted: 1
+  uiCooldownText: {fileID: 0}
+  uiCooldownImage: {fileID: 0}
+  abilityData:
+    name: 
+    targeted: 0
+    manaCost: 0
+    damageMultiplier: 0
+    cooldown: 0
+    active: 0
+    properties: []
+    chargesConditions: []
+  poisonRadius: 6
+  poisonDuration: 6
+  poisonDamageInterval: 1
+  poisonDamageMultiplier: 0.2

@@ -18,6 +18,8 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerStats PlayerStats { get; private set; }
     private StartingPlayerStats startingPlayerStats;
 
+    private SwordAnimatorHandler swordAnimatorHandler; // for "hand"
+    [SerializeField] private Transform swordPivot;
     [SerializeField] private GameObject swordObject;
 
     public List<Buff> buffs { get; set; } = new List<Buff>();
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour, IDamageable
         movement = GetComponent<PlayerMovement>();
         inventory = GetComponent<Inventory>();
         startingPlayerStats = GetComponent<StartingPlayerStats>();
+        swordAnimatorHandler = GetComponentInChildren<SwordAnimatorHandler>();
     }
     private void Start()
     {
@@ -46,40 +49,37 @@ public class Player : MonoBehaviour, IDamageable
         Stamina = PlayerStats.MaxStamina;
         UI.Instance.StatBars.UpdateHpBar();
         Transform = transform;
-        /*Buff healthRegenTimer = new Buff("timer", 1f, this);
-        healthRegenTimer.OnRemoveBuff = delegate
-        {
-            Heal(1);
-            BuffManager.Instance.AddBuff(healthRegenTimer, this);
-        };
-        Buff healthRegen = new Buff("hpRegen", 1f, this)
-        {
-            unlimited = true,
-            OnAddBuff = delegate 
-            {
-                BuffManager.Instance.AddBuff(healthRegenTimer, this);
-            }
-        };
-        BuffManager.Instance.AddBuff(healthRegen, this);
-        */
     }
     private void Update()
     {
+        print(FindObjectsByType<SwordAnimatorHandler>(FindObjectsSortMode.None).Length);
+
         BuffManager.Instance.UpdateBuffs(this);
         manaRegenTimer -= Time.deltaTime;
         if (movement.movementState == PlayerMovementState.Moving)
         {
             staminaRegenTimer -= Time.deltaTime;
         }
+        float healthPercentage = GetHealthPercentage();
         if (staminaRegenTimer <= 0)
         {
             RegenerateStamina(1);
-            staminaRegenTimer += 1 / PlayerStats.GetStat(StatType.StaminaRegen);
+            if (healthPercentage <= 0.75f)
+                staminaRegenTimer += 1 / PlayerStats.GetStat(StatType.StaminaRegen)
+                / (0.25f + 0.75f * Mathf.Pow(healthPercentage, 2));
+
+            else
+                staminaRegenTimer += 1 / PlayerStats.GetStat(StatType.StaminaRegen);
         }
         if (manaRegenTimer <= 0)
         {
             ReplenishMana(1);
-            manaRegenTimer += 1 / PlayerStats.GetStat(StatType.ManaRegen);
+            if (healthPercentage <= 0.75f)
+                manaRegenTimer += 1 / PlayerStats.GetStat(StatType.ManaRegen) 
+                / (0.5f + 0.5f * Mathf.Pow(healthPercentage, 2));
+
+            else
+                manaRegenTimer += 1 / PlayerStats.GetStat(StatType.ManaRegen);
         }
     }
 
@@ -89,6 +89,7 @@ public class Player : MonoBehaviour, IDamageable
         trueDamage = (trueDamage < 1) ? 1 : trueDamage;
         Health -= trueDamage;
         UI.Instance.StatBars.UpdateHpBar();
+        UI.Instance.CreateDamageText(transform.position, trueDamage);
 
         movement.Knockback(transform.position - attacker.Transform.transform.position);
         if (Health <= 0) Destroy(gameObject);
@@ -96,16 +97,23 @@ public class Player : MonoBehaviour, IDamageable
     public void HitWithSword(Enemy enemy)
     {
         inventory.equippedSword.HitTarget(PlayerStats.GetStat(StatType.PhysicalDamage), enemy, this);
+        inventory.equippedSword.OnHit(enemy, this);
     }
     public void Heal(float amount)
     {
         Health = Mathf.Min(PlayerStats.GetStat(StatType.MaxHealth), Health + amount);
+        UI.Instance.CreateHealText(transform.position, amount);
         UI.Instance.StatBars.UpdateHpBar();
     }
     public void SpendMana(float amount)
     {
         Mana = Mathf.Min(PlayerStats.GetStat(StatType.MaxMana), Mana - amount);
-        manaRegenTimer = 4f;
+        float healthPercentage = GetHealthPercentage();
+        if (healthPercentage <= 0.75f)
+            manaRegenTimer = 2f / (0.5f + 0.5f * Mathf.Pow(healthPercentage, 2));
+        else
+            manaRegenTimer = 2f;
+
         UI.Instance.StatBars.UpdateManaBar();
     }
     public void ReplenishMana(float amount)
@@ -116,7 +124,12 @@ public class Player : MonoBehaviour, IDamageable
     public void ExpendStamina(float amount)
     {
         Stamina = Mathf.Min(PlayerStats.GetStat(StatType.MaxStamina), Stamina - amount);
-        staminaRegenTimer = 0.5f;
+        float healthPercentage = GetHealthPercentage();
+        if (healthPercentage <= 0.75f)
+            staminaRegenTimer = 0.6f / (0.25f + 0.75f * Mathf.Pow(GetHealthPercentage(), 2));
+        else
+            staminaRegenTimer = 0.6f;
+
         UI.Instance.StatBars.UpdateStaminaBar();
     }
     public void RegenerateStamina(float amount)
@@ -124,12 +137,36 @@ public class Player : MonoBehaviour, IDamageable
         Stamina = Mathf.Min(PlayerStats.GetStat(StatType.MaxStamina), Stamina + amount);
         UI.Instance.StatBars.UpdateStaminaBar();
     }
+    public float GetHealthPercentage()
+    {
+        return Health / PlayerStats.GetStat(StatType.MaxHealth);
+    }
     public void ChangeMeleeWeapon(Sword weapon)
-    {       
+    {
+        GameObject sword = Instantiate(weapon.prefab, Vector3.zero, Quaternion.identity);
+        sword.AddComponent<SwordObject>().OnSwordHit = OnSwordTriggerEnter;
+        Destroy(swordObject);
+        sword.layer = LayerMask.NameToLayer("Default");
+
+        sword.transform.SetParent(swordPivot);
+        sword.SetActive(meleeEquipped);
+        //movement.swordAnimatorHandler = swordAnimatorHandler;
+        swordObject = sword;
         PlayerStats.SetStat(StatType.PhysicalDamage, weapon.physicalDamage);
         inventory.equippedSword = weapon;
+        swordAnimatorHandler.InitializePlayer(this);
+
         UI.Instance.ChangeWeapon(inventory.equippedSword);
     }
+    private void OnSwordTriggerEnter(Collider2D collision)
+    {
+        print("sword hit");
+        if (collision.GetComponent<Enemy>() != null)
+        {
+            HitWithSword(collision.GetComponent<Enemy>());
+        }
+    }
+
     public void ChangeMagicWeapon(Staff weapon)
     {
         PlayerStats.SetStat(StatType.MagicalDamage, weapon.magicDamage);
@@ -151,7 +188,7 @@ public class Player : MonoBehaviour, IDamageable
     public void AddAbility(Ability ability)
     {
         Abilities.Add(ability);
-        AbilityManager.Instance.CreateAbilityButtons();
+        AbilityManager.Instance.CreateAbility(ability);
     }
     public void AddXP(int xp)
     {

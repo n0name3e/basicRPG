@@ -8,9 +8,7 @@ public class Bullet : MonoBehaviour
     private float damage;
     private Weapon sendingWeapon;
 
-    //public Weapon.HitEvent OnHit;
-    //public delegate void HitEvent(IDamageable target);
-    //public HitEvent OnHit;
+    public System.Action<IDamageable, Vector2, IDamageable> OnHit;
 
     public void Launch(Vector3 _direction, float _speed, IDamageable _sender, float _damage, Weapon sendingWeapon = null)
     {
@@ -33,11 +31,13 @@ public class Bullet : MonoBehaviour
             if (sendingWeapon == null)
             {
                 enemy.Hit(damage, sender);
+                OnHit?.Invoke(enemy, transform.position, sender);
             }
             else
             {
                 sendingWeapon.HitTarget(damage, enemy, sender);
             }
+            Destroy(gameObject);
             //OnHit?.Invoke(enemy);
             //enemy.Hit(damage, sender);
         }

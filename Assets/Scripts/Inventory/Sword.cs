@@ -11,4 +11,9 @@ public class Sword : Weapon
 
     public string swingAnimationName;
     public string thrustAnimationName;
+
+    public virtual void OnHit(Enemy enemy, Player hitter)
+    {
+
+    }
 }

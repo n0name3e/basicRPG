@@ -12,12 +12,12 @@ public class PlayerMovement : MonoBehaviour
 {
     private Player player;
     private Rigidbody2D rb;
-    private SwordAnimatorHandler swordAnimatorHandler;
+    public SwordAnimatorHandler swordAnimatorHandler;
     [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private AnimationCurve knockbackCurve;
-    [SerializeField] private Transform swordContainer;
+    [field: SerializeField] public AnimationCurve knockbackCurve { get; private set; }
 
     public PlayerMovementState movementState;
+    public bool isAimingAbility;
 
     private Vector2 originalKnockbackPosition;
     private Vector2 knockbackDirection;
@@ -47,11 +47,16 @@ public class PlayerMovement : MonoBehaviour
         {
             RotateTowardsMouse();
         }
-        else // to fix the stupid bug where the player rotates while attacking i hate this bug as well as this piece of code
+        else // to fix the stupid bug where the player rotates while attacking (it could actually happened because of z-axis on rb wasn't frozen)
         {
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, playerAttackRotation));
         }
-        if (Input.GetMouseButtonDown(0) && movementState == PlayerMovementState.Moving
+        if (isAimingAbility && movementState != PlayerMovementState.Moving)
+        {
+            isAimingAbility = false;
+            AbilityManager.Instance.CancelTargeting();
+        }
+        if (Input.GetMouseButtonDown(0) && !isAimingAbility && movementState == PlayerMovementState.Moving
             && !EventSystem.current.IsPointerOverGameObject())
         {
             if (player.meleeEquipped)
@@ -99,6 +104,15 @@ public class PlayerMovement : MonoBehaviour
 
         return new Vector2(moveX, moveY).normalized;
     }
+    public bool AimAbility() // true if can aim ability
+    {   
+        if (movementState != PlayerMovementState.Moving)
+        {
+            return false;
+        }
+        isAimingAbility = true;
+        return true;
+    }
     private void Move()
     {
         if (Input.GetKeyDown(KeyCode.Space) && movementState == PlayerMovementState.Moving && dashTimer >= player.PlayerStats.DashCooldown)
@@ -136,13 +150,18 @@ public class PlayerMovement : MonoBehaviour
         if (player.Stamina < player.inventory.equippedSword.staminaCost)
             return;
 
+        Sword sword = player.inventory.equippedSword;
+        float attackLength = swordAnimatorHandler.GetAnimationLength(sword.swingAnimationName);
+        float targetAttackDuration = sword.attackDuration;
+        float speedMultiplier = attackLength / targetAttackDuration * player.PlayerStats.AttackSpeed;
+
         player.ExpendStamina(player.inventory.equippedSword.staminaCost);
 
         playerAttackRotation = transform.rotation.eulerAngles.z;
         movementState = PlayerMovementState.Attacking;
-        swordAnimatorHandler.PlayAnimation(player.inventory.equippedSword.swingAnimationName);
-        
+        swordAnimatorHandler.PlayAnimation(player.inventory.equippedSword.swingAnimationName, speedMultiplier);     
     }
+    
     private void Shoot()
     {
         if (attackTimer > 0 || player.Mana < player.inventory.equippedStaff.manaCost) 
@@ -155,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direction = (mousePosition - transform.position).normalized;
 
         GameObject bulletObject = Instantiate(bulletPrefab, transform.position, transform.rotation);
-        Bullet bullet = bulletObject.AddComponent<Bullet>();
+        Bullet bullet = bulletObject.GetComponent<Bullet>();
         bullet.Launch(direction, 20f, GetComponent<IDamageable>(), player.PlayerStats.MagicalDamage, player.inventory.equippedStaff);
         attackTimer = player.PlayerStats.AttackCooldown / player.PlayerStats.AttackSpeed;
         UI.Instance.UpdateAttackBar();

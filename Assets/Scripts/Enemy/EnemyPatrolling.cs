@@ -17,9 +17,9 @@ public class EnemyPatrolling : MonoBehaviour
         oppositeDirection = endingDestination;
     }
 
-    private void Update()
+    public void Patrol()
     {
-        if (enemy.state != EnemyState.Patrolling) return;
+        //if (enemy.State != EnemyState.Patrolling) return;
         transform.position = Vector2.MoveTowards(transform.position, direction, speed * Time.deltaTime);
         //transform.position = Vector2.Lerp(transform.position, direction, speed * Time.deltaTime);
         if (Vector2.Distance(transform.position, direction) <= 0.2f)

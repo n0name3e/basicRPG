@@ -14,6 +14,7 @@ public class UI : MonoBehaviour
     [SerializeField] private GameObject attackBar;
     [SerializeField] private Text physicalDamageText;
     [SerializeField] private Text magicDamageText;
+    [SerializeField] private GameObject damageTextRoot;
 
     [Space(5)]
     [Header("STATS")]
@@ -27,7 +28,7 @@ public class UI : MonoBehaviour
     [SerializeField] private Text s_attackSpeedText;
     [SerializeField] private Text s_defenseText;
 
-    [SerializeField] private GameObject inventoryWindow;   
+    [SerializeField] private GameObject inventoryWindow;
     [SerializeField] private Tooltip inventoryTooltip;
 
     [Space(5)]
@@ -40,16 +41,27 @@ public class UI : MonoBehaviour
     [SerializeField] private GameObject bodyArmor;
     [SerializeField] private GameObject legArmor;
 
+    // armor bonuses texts
+    [Space(5)]
+    [SerializeField] private Text headArmorBonus;
+    [SerializeField] private Text bodyArmorBonus;
+    [SerializeField] private Text legArmorBonus;
+
+    [Space(5)]
+    [SerializeField] private GameObject abilitiesContainer;
+    [SerializeField] private GameObject abilityOutline; // for selected ability
+    
     [Space(5)]
     [SerializeField] private GameObject swordOutline; // enable when sword is chosen
     [SerializeField] private GameObject staffOutline; // enable when staff is chosen
 
     private Dictionary<EquipmentSlot, GameObject> equipmentObject = new Dictionary<EquipmentSlot, GameObject>();
+    private Dictionary<EquipmentSlot, Text> armorBonusObject = new Dictionary<EquipmentSlot, Text>();
 
     private Player player;
 
     private GameObject itemObjectUI;
-    private List<GameObject> itemObjectsPool = new List<GameObject>();
+    private GameObject damageText;
 
     private void Awake()
     {
@@ -57,6 +69,7 @@ public class UI : MonoBehaviour
         else Instance = this;
         player = FindObjectOfType<Player>();
         StatBars = GetComponent<StatBars>();
+        damageText = Resources.Load("DamageText") as GameObject;
     }
     private void Start()
     {
@@ -70,6 +83,10 @@ public class UI : MonoBehaviour
         equipmentObject[EquipmentSlot.Body] = bodyArmor;
         equipmentObject[EquipmentSlot.Legs] = legArmor;
 
+        armorBonusObject[EquipmentSlot.Head] = headArmorBonus;
+        armorBonusObject[EquipmentSlot.Body] = bodyArmorBonus;
+        armorBonusObject[EquipmentSlot.Legs] = legArmorBonus;
+
         itemObjectUI = (GameObject) Resources.Load("ItemUI");
     }
     private void Update()
@@ -81,6 +98,24 @@ public class UI : MonoBehaviour
     {
         enemy.transform.GetChild(0).GetChild(1).GetComponent<Image>().fillAmount = enemy.Health / enemy.maxHealth;
     }
+
+    public void CreateDamageText(Vector3 position, float damage)
+    {
+        GameObject text = Instantiate(damageText, position, Quaternion.identity);
+        text.transform.SetParent(damageTextRoot.transform);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(position);
+        text.transform.position = screenPos;
+        text.GetComponent<DamageText>().ManifestDamageText(damage);
+    }
+    public void CreateHealText(Vector3 position, float damage)
+    {
+        GameObject text = Instantiate(damageText, position, Quaternion.identity);
+        text.transform.SetParent(damageTextRoot.transform);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(position);
+        text.transform.position = screenPos;
+        text.GetComponent<DamageText>().ManifestHealText(damage);
+    }
+
     public void UpdateAttackBar()
     {
         attackBar.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
@@ -105,7 +140,7 @@ public class UI : MonoBehaviour
     {
         bool active = statsWindow.activeInHierarchy;
         statsWindow.SetActive(!active);
-        equipmentWindow.SetActive(!active);
+        //equipmentWindow.SetActive(!active);
         if (!active) OpenStats();
         else CloseStats();
     }
@@ -191,17 +226,6 @@ public class UI : MonoBehaviour
         Inventory inventory = player.inventory;
         for (int i = 0; i < inventory.items.Count; i++)
         {
-            /*if (itemObjectsPool.Count <= i)
-            {
-                itemObject = Instantiate(itemObjectUI);
-                itemObjectsPool.Add(itemObject);
-                itemObject.transform.SetParent(inventoryWindow.transform);
-            }
-            else
-            {
-                itemObject = itemObjectsPool[i];
-                itemObject.SetActive(true);
-            }*/
             GameObject itemObject = Instantiate(itemObjectUI);
             itemObject.transform.SetParent(inventoryWindow.transform);
             Item item = inventory.items[i];
@@ -216,14 +240,40 @@ public class UI : MonoBehaviour
             itemUI.tooltip = inventoryTooltip;
         }
     }
-
+    public void UpdateAbilitiesContainer()
+    {
+        foreach (Transform gmObject in abilitiesContainer.transform)
+        {
+            Destroy(gmObject.gameObject);
+        }
+        for (int i = 0; i < player.Abilities.Count; i++)
+        {
+            GameObject abilityObject = Instantiate(itemObjectUI);
+            abilityObject.transform.SetParent(abilitiesContainer.transform);
+            Ability ability = player.Abilities[i];
+            Image image = abilityObject.GetComponent<Image>();
+            image.sprite = ability.icon;
+            InventoryItemUI itemUI = abilityObject.GetComponent<InventoryItemUI>();
+            itemUI.ability = ability;
+            itemUI.tooltip = inventoryTooltip;
+        }
+    }
+    public void EnableAbilityOutline(Vector2 position)
+    {
+        abilityOutline.GetComponent<RectTransform>().position = position;
+        abilityOutline.SetActive(true);
+    }
+    public void DisableAbilityOutline()
+    {
+        abilityOutline.SetActive(false);
+    }
     public void UpdateArmor(EquipmentSlot equipmentSlot)
     {
         Dictionary<EquipmentSlot, Equipment> equipment = player.inventory.equipment;
-
-        equipmentObject[equipmentSlot].GetComponent<Image>().sprite = equipment[equipmentSlot].image;
-        equipmentObject[equipmentSlot].GetComponent<InventoryItemUI>().item = equipment[equipmentSlot];
-        //itemUI.tooltip = inventoryTooltip;
+        Equipment armor = equipment[equipmentSlot];
+        equipmentObject[equipmentSlot].GetComponent<Image>().sprite = armor.image;
+        equipmentObject[equipmentSlot].GetComponent<InventoryItemUI>().item = armor;
+        armorBonusObject[equipmentSlot].GetComponent<Text>().text = $"+{armor.Defense}";
     }
     public void UnequipArmor(int index) // called from button
     {
@@ -236,6 +286,7 @@ public class UI : MonoBehaviour
         equipmentObject[slot].GetComponent<Image>().sprite = null;
         equipmentObject[slot].GetComponent<InventoryItemUI>().item = null;
         equipmentObject[slot].GetComponent<InventoryItemUI>().tooltip.HideTooltip();
+        armorBonusObject[slot].GetComponent<Text>().text = "0";
         UpdatePlayerStats();
     }
 }

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc96a0aead7b8fc49bc898f873562823, type: 3}
+  m_Name: Greatsword
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Greatsword
+  <Description>k__BackingField: Thrust
+  image: {fileID: 21300000, guid: 141175617646af2428877ee538d718cb, type: 3}
+  attackCooldown: 2
+  physicalDamage: 50
+  staminaCost: 5
+  attackDuration: 0.4
+  prefab: {fileID: 936831517407173480, guid: 997a054fec25cad46ad1f2e1c0844731, type: 3}
+  swingAnimationName: handSwordThrust
+  thrustAnimationName: 

@@ -10,6 +10,7 @@ public class EnemyAttacking : MonoBehaviour
 {
     private Enemy enemy;
     private Player player;
+    private SpriteRenderer spriteRenderer;
     private float attackTimer = 0.0f;
     private AttackState attackState = AttackState.None;
 
@@ -17,23 +18,24 @@ public class EnemyAttacking : MonoBehaviour
     {
         enemy = GetComponent<Enemy>();
         player = FindObjectOfType<Player>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     void Update()
     {
-        if (enemy.state == EnemyState.Attacking) attackTimer += Time.deltaTime;
-        Chase();
-        Attack();
+        if (enemy.State == EnemyState.Attacking) attackTimer += Time.deltaTime;
+        //Chase();
+        //Attack();
     }
-    private void Chase()
+    public void Chase()
     {
-        if (enemy.state != EnemyState.Chasing) return;
+        //if (enemy.State != EnemyState.Chasing) return;
         transform.position = Vector2.MoveTowards(transform.position, player.transform.position, enemy.speed * Time.deltaTime);
     }
-    private void Attack()
+    public void Attack()
     {
-        if (enemy.state != EnemyState.Attacking)
+        if (enemy.State != EnemyState.Attacking)
         {
-            GetComponent<SpriteRenderer>().color = Color.red;
+            spriteRenderer.color = Color.red;
             return;
         }        
         if (attackState == AttackState.None)
@@ -43,7 +45,7 @@ public class EnemyAttacking : MonoBehaviour
         }
         if (attackState == AttackState.Hitting)
         {
-            GetComponent<SpriteRenderer>().color = Color.yellow;
+            spriteRenderer.color = Color.yellow;
             if (attackTimer >= enemy.attackDelay / enemy.attackSpeed)
             {
                 if (enemy.attackType == AttackType.Melee) HitPlayer();
@@ -54,11 +56,11 @@ public class EnemyAttacking : MonoBehaviour
         }
         if (attackState == AttackState.Cooldowning)
         {
-            GetComponent<SpriteRenderer>().color = Color.green;
+            spriteRenderer.color = Color.green;
             if (attackTimer >= enemy.attackCooldown / enemy.attackSpeed)
             {
                 attackState = AttackState.None;
-                enemy.state = EnemyState.Chasing;
+                enemy.State = EnemyState.Chasing;
                 return;
             }
         }
@@ -76,18 +78,5 @@ public class EnemyAttacking : MonoBehaviour
 
         GameObject bullet = Instantiate(Resources.Load<GameObject>("Projectile"), transform.position, transform.rotation);
         bullet.AddComponent<Bullet>().Launch(direction, 15f, GetComponent<Enemy>(), GetComponent<Enemy>().damage);
-        
-        /*float angle = 0;
-        for (float i = 0; i <= 270; i += 90)
-        {
-            Vector2 direction = (player.transform.position - transform.position).normalized;
-            //Vector2 direction = Quaternion.Euler(0, 0, i) * Vector2.up;
-            //angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-            
-            //Vector2 direction = Quaternion.Euler(0, 0, i) * Vector2.up; //(player.transform.position - transform.position).normalized;
-            GameObject bullet = Instantiate(Resources.Load<GameObject>("Projectile"), transform.position, transform.rotation);
-            bullet.AddComponent<Bullet>().Launch(direction, 15f, GetComponent<Enemy>(), GetComponent<Enemy>().damage);
-            bullet.transform.Rotate(0, 0, i);
-        }*/
     }
 }

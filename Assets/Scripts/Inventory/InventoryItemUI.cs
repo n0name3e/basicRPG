@@ -6,13 +6,22 @@ using UnityEngine.EventSystems;
 public class InventoryItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Item item; // Assign this appropriately
+    public Ability ability; // alternatively can be assigned to show ability description
     public Tooltip tooltip; // Reference to the Tooltip instance
 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (item == null)
-            return;
+        if (ability != null)
+            ShowAbilityTooltip();
+        else if (item != null)
+            ShowItemTooltip();
+        else
+            return; 
+    }    
+
+    public void ShowItemTooltip()
+    {
         if (tooltip == null)
             tooltip = FindObjectOfType<Tooltip>();
         // Immediately show the tooltip when the cursor hovers over the item
@@ -42,7 +51,7 @@ public class InventoryItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (item is Sword sword)
         {
             description.Append($"\n\n{sword.physicalDamage} Damage");
-            description.Append($"\n{Mathf.Round((1/sword.attackDuration) * 100) / 100} Attack Speed");
+            description.Append($"\n{Mathf.Round((1 / sword.attackDuration) * 100) / 100} Attack Speed");
         }
         if (item is Staff staff)
         {
@@ -54,6 +63,18 @@ public class InventoryItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         //tooltip.transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, tooltip.transform.GetChild(1).GetComponent<Text>().preferredWidth);
     }
 
+    public void ShowAbilityTooltip()
+    {
+        if (tooltip == null)
+            tooltip = FindObjectOfType<Tooltip>();
+
+        AbilityManager abilityManager = AbilityManager.Instance;
+
+        System.Text.StringBuilder description = new System.Text.StringBuilder();
+        description.Append(abilityManager.GetAbilityDescription(ability));
+    
+        tooltip.ShowTooltip(description.ToString());
+    }
     public void OnPointerExit(PointerEventData eventData)
     {
         // Hide the tooltip when the cursor leaves the item // omg so useful comment it must be left here

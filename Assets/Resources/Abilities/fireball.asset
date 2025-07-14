@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: fireball
   m_EditorClassIdentifier: 
   name: Fireball
-  icon: {fileID: 21300000, guid: e55138fb25132be44b84abbb774323d6, type: 3}
+  icon: {fileID: 21300000, guid: fef2091ffeabcc348ad3139a34da8453, type: 3}
   maxCooldown: 4
-  cooldown: 0
+  cooldown: -0.004960672
   manaCost: 30
   damageMultiplier: 0.5
   passive: 0
+  targeted: 1
   uiCooldownText: {fileID: 0}
   uiCooldownImage: {fileID: 0}
   abilityData:
@@ -30,3 +31,4 @@ MonoBehaviour:
     active: 0
     properties: []
     chargesConditions: []
+  explosionRadius: 4

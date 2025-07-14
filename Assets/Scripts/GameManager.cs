@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public AnimationCurve knockbackCurve;
+
     public static GameManager Instance { get; private set; }
     public Player Player { get; private set; }
     private void Awake()
@@ -33,6 +35,10 @@ public class GameManager : MonoBehaviour
         UI.Instance.ChangeWeapon(Player.inventory.equippedSword);
         Player.AddAbility(AbilityManager.Instance.FindAbility("fireball"));
         Player.AddAbility(AbilityManager.Instance.FindAbility("heal"));
+        Player.AddAbility(AbilityManager.Instance.FindAbility("deathray"));
+        Player.AddAbility(AbilityManager.Instance.FindAbility("poison cloud"));
+        Player.AddAbility(AbilityManager.Instance.FindAbility("repulsor"));
+        Player.AddAbility(AbilityManager.Instance.FindAbility("fortify weapon"));
         SpawnEnemy(5, 5);
     }
     public void SpawnEnemy(float x, float y)

@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: heal
   m_EditorClassIdentifier: 
   name: Heal
-  icon: {fileID: 21300000, guid: 2dfcb33fa0a49c94b9c589bd0cb1f112, type: 3}
+  icon: {fileID: 21300000, guid: 05dd9732987f0c54ba4f4fa8d8c80c25, type: 3}
   maxCooldown: 3
-  cooldown: 0
+  cooldown: -0.0020250594
   manaCost: 50
   damageMultiplier: 0
   passive: 0
+  targeted: 0
   uiCooldownText: {fileID: 0}
   uiCooldownImage: {fileID: 0}
   abilityData:

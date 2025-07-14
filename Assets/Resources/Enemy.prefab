@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1185940739}
   - component: {fileID: 1185940741}
   - component: {fileID: 1185940740}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 1803699415}
   - component: {fileID: 1803699417}
   - component: {fileID: 1803699416}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Image (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 2077502691}
   - component: {fileID: 2077502690}
   - component: {fileID: 2077502689}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 7773808846600900576}
   - component: {fileID: 6838001479297031308}
   - component: {fileID: 4642916202457822413}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 5713884935949965334}
   - component: {fileID: 7913101532778283631}
   - component: {fileID: 4459470399046113137}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 8451174069343580941}
   - component: {fileID: 3626857278963930262}
   - component: {fileID: 145821780632712309}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Image (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -521,7 +521,7 @@ GameObject:
   - component: {fileID: 4184228649423344805}
   - component: {fileID: 5170880454847201333}
   - component: {fileID: 797780214}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -626,7 +626,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -650,14 +650,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8814797080095266366}
-  m_BodyType: 2
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -668,7 +668,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &4184228649423344805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -682,13 +682,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 0
-  <attackDelay>k__BackingField: 0.5
-  <attackCooldown>k__BackingField: 1
-  <attackSpeed>k__BackingField: 1
-  <attackRange>k__BackingField: 2.5
-  <damage>k__BackingField: 20
-  experience: 150
-  detectionRadius: 5
+  attackDelay: 0.5
+  attackCooldown: 1
+  attackSpeed: 1
+  attackRange: 4
+  attackDistance: 2.5
+  detectionRange: 6
+  damage: 20
+  experienceReward: 150
+  knockbackCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  State: 0
   dropTable: {fileID: 11400000, guid: 1a4c635ca5a8ff1498abe1f6f908019b, type: 2}
 --- !u!114 &5170880454847201333
 MonoBehaviour:
